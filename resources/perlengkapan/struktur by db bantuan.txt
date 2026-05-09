@@ -1,0 +1,314 @@
+SIMPEMBAS (Sistem Informasi Penerimaan Bantuan Sosial)
+
+AUTHENTIKASI DATABASE
+
+Controllers/auth/authloginadmin  -> middleware/middlewareadmin  -> /loginadmin
+Controllers/auth/authloginuser   -> middleware/middlewareuser   -> /loginuser
+
+
+==================================================================
+[MIDDLEWARE ADMIN]
+==================================================================
+
+└─── dashboardadmin
+     ├── dashboard utama
+     ├── statistik bantuan
+     ├── grafik penerima bantuan
+     ├── laporan bantuan
+     └── monitoring pengajuan
+
+
+==================================================================
+EVENT / PROGRAM DIVISION
+==================================================================
+
+└─── /event
+     └── (id,name,detail,startdate,enddate,status)
+
+└─── /program
+     └── (id,idevent,name,detail,quota,status)
+
+
+==================================================================
+ADDRESS MASTER
+==================================================================
+
+└─── /address
+     └── (
+             id,
+             street,
+             village,
+             district,
+             regency,
+             province,
+             postalcode,
+             country
+         )
+
+
+==================================================================
+USER DIVISION
+==================================================================
+
+└─── /roleuser
+     └── (id,name)
+
+        SEEDING:
+        - admin
+        - operator
+        - bendahara
+
+└─── /user
+     └── (
+             id,
+             idrole,
+             name,
+             username,
+             password,
+             status(active,nonactive),
+             idaddress,
+             photo
+         )
+
+
+==================================================================
+PENERIMA BANTUAN DIVISION
+==================================================================
+
+└─── /categorybeneficiary
+     └── (id,name)
+
+        SEEDING:
+        - fakir
+        - miskin
+        - rentan
+        - menengah
+
+└─── /beneficiary
+     └── (
+             id,
+             idcategorybeneficiary,
+             idaddress,
+             nik,
+             kk,
+             name,
+             username,
+             password,
+             phone,
+             statusacceptance(pending,accepted,rejected),
+             status(active,nonactive),
+             photo
+         )
+
+
+==================================================================
+PETUGAS DIVISION
+==================================================================
+
+└─── /position
+     └── (id,name)
+
+        SEEDING:
+        - ketua
+        - sekretaris
+        - bendahara
+        - relawan
+
+└─── /employee
+     └── (
+             id,
+             idposition,
+             name,
+             username,
+             password,
+             phone,
+             status(active,nonactive),
+             idaddress,
+             photo
+         )
+
+
+==================================================================
+BANTUAN DIVISION
+==================================================================
+
+└─── /assistancetype
+     └── (id,name)
+
+        SEEDING:
+        - sembako
+        - pendidikan
+        - kesehatan
+        - rumah
+        - modal usaha
+
+└─── /assistance
+     └── (
+             id,
+             idevent,
+             iduser,
+             assistancecode,
+             assistancename,
+             totalquota,
+             totaldistributed,
+             status(open,closed)
+         )
+
+└─── /assistancedetail
+     └── (
+             id,
+             idassistance,
+             idbeneficiary,
+             amount,
+             status(pending,approved,rejected,completed)
+         )
+
+
+==================================================================
+PENGAJUAN BANTUAN DIVISION
+==================================================================
+
+└─── /submission
+     └── (
+             id,
+             idbeneficiary,
+             idassistancetype,
+             title,
+             description,
+             file,
+             status(pending,approved,rejected)
+         )
+
+└─── /submissiondetail
+     └── (
+             id,
+             idsubmission,
+             verificationnote,
+             approvedby,
+             approveddate
+         )
+
+
+==================================================================
+DONASI DIVISION
+==================================================================
+
+└─── /donationcategory
+     └── (id,name)
+
+        SEEDING:
+        - uang
+        - barang
+        - makanan
+
+└─── /donation
+     └── (
+             id,
+             iduser,
+             idevent,
+             donationname,
+             total,
+             status(open,closed)
+         )
+
+└─── /donationdetail
+     └── (
+             id,
+             iddonation,
+             donorname,
+             amount,
+             paymentstatus(paid,pending)
+         )
+
+
+==================================================================
+LAPORAN DIVISION
+==================================================================
+
+└─── /reportassistance
+└─── /reportdonation
+└─── /reportsubmission
+└─── /reportbeneficiary
+
+
+==================================================================
+PUBLICATION DIVISION
+==================================================================
+
+└─── /article
+└─── /comment
+└─── /gallery
+
+
+==================================================================
+[MIDDLEWARE USER / PENERIMA BANTUAN]
+==================================================================
+
+└─── /dashboarduser
+     ├── ringkasan bantuan diterima
+     ├── status pengajuan
+     ├── total bantuan
+     └── riwayat bantuan
+
+
+==================================================================
+HISTORY PENGAJUAN
+==================================================================
+
+└─── /submissionhistory
+     ├── index
+     ├── create
+     ├── edit
+     └── show
+
+
+==================================================================
+HISTORY BANTUAN
+==================================================================
+
+└─── /assistancehistory
+     ├── index
+     ├── detail
+     └── downloadpdf
+
+
+==================================================================
+HISTORY DONASI
+==================================================================
+
+└─── /donationhistory
+     ├── index
+     ├── create
+     ├── edit
+     └── show
+
+
+==================================================================
+PROFILE USER
+==================================================================
+
+└─── /profile
+     ├── edit profile
+     ├── change password
+     └── upload photo
+
+
+==================================================================
+FITUR APLIKASI
+==================================================================
+
+✔ Multi Login Authentication
+✔ Admin Dashboard
+✔ User Dashboard
+✔ Middleware Admin
+✔ Middleware User
+✔ CRUD Bantuan
+✔ CRUD Pengajuan
+✔ CRUD Donasi
+✔ Upload File
+✔ Status Approval
+✔ Riwayat Bantuan
+✔ Laporan PDF
+✔ Artikel & Komentar
+✔ Bootstrap/AdminLTE Ready
+✔ Laravel 13 Ready
