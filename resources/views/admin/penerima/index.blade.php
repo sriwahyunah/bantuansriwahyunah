@@ -1,70 +1,28 @@
-@extends('layouts.appuser')
-
-@section('title', 'Data Penerima')
+@extends('layouts.app')
 
 @section('content')
 
-<!-- Content Header -->
-<section class="content-header">
+<div class="content-wrapper">
 
-    <div class="container-fluid">
+    <!-- HEADER -->
+    <section class="content-header">
+        <div class="container-fluid">
 
-        <div class="row mb-2">
+            <div class="row mb-3">
 
-            <div class="col-sm-6">
-                <h1 class="font-weight-bold">
-                    Data Penerima
-                </h1>
-            </div>
+                <div class="col-sm-6">
+                    <h1 class="m-0 font-weight-bold">
+                        Data Jabatan
+                    </h1>
+                </div>
 
-            <div class="col-sm-6">
+                <div class="col-sm-6 text-right">
 
-                <ol class="breadcrumb float-sm-right">
+                    <a href="{{ route('jabatan.create') }}"
+                       class="btn btn-primary shadow-sm">
 
-                    <li class="breadcrumb-item">
-                        <a href="{{ url('/dashboard') }}">
-                            Dashboard
-                        </a>
-                    </li>
-
-                    <li class="breadcrumb-item active">
-                        Penerima
-                    </li>
-
-                </ol>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-<!-- Main content -->
-<section class="content">
-
-    <div class="container-fluid">
-
-        <div class="card card-primary card-outline shadow-sm">
-
-            <!-- Card Header -->
-            <div class="card-header">
-
-                <h3 class="card-title">
-
-                    <i class="fas fa-users mr-2"></i>
-                    Data Penerima Bantuan
-
-                </h3>
-
-                <div class="card-tools">
-
-                    <a href="{{ url('/penerima/create') }}"
-                       class="btn btn-primary btn-sm">
-
-                        <i class="fas fa-plus"></i>
-                        Tambah Penerima
+                        <i class="fas fa-plus mr-1"></i>
+                        Tambah Jabatan
 
                     </a>
 
@@ -72,201 +30,137 @@
 
             </div>
 
-            <!-- Card Body -->
-            <div class="card-body">
+        </div>
+    </section>
 
-                <!-- Search -->
-                <div class="row mb-3">
+    <!-- CONTENT -->
+    <section class="content">
+        <div class="container-fluid">
 
-                    <div class="col-md-4">
+            <div class="card card-outline card-primary shadow-sm">
 
-                        <form action="{{ url('/penerima') }}"
-                              method="GET">
+                <!-- CARD HEADER -->
+                <div class="card-header">
 
-                            <div class="input-group">
+                    <h3 class="card-title">
 
-                                <input type="text"
-                                       name="search"
-                                       class="form-control"
-                                       placeholder="Cari penerima..."
-                                       value="{{ request('search') }}">
+                        <i class="fas fa-briefcase mr-1"></i>
+                        Tabel Data Jabatan
 
-                                <div class="input-group-append">
+                    </h3>
 
-                                    <button class="btn btn-primary">
+                </div>
 
-                                        <i class="fas fa-search"></i>
+                <!-- CARD BODY -->
+                <div class="card-body">
 
-                                    </button>
+                    <div class="table-responsive">
 
-                                </div>
+                        <table class="table table-bordered table-hover">
 
-                            </div>
+                            <thead class="bg-primary text-white text-center">
 
-                        </form>
+                                <tr>
+                                    <th width="5%">No</th>
+                                    <th>Nama Jabatan</th>
+                                    <th>Keterangan</th>
+                                    <th width="20%">Aksi</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                @forelse($jabatan as $item)
+
+                                <tr>
+
+                                    <td class="text-center align-middle">
+                                        {{ $loop->iteration }}
+                                    </td>
+
+                                    <td class="align-middle font-weight-bold">
+                                        {{ $item->nama_jabatan }}
+                                    </td>
+
+                                    <td class="align-middle">
+                                        {{ $item->keterangan }}
+                                    </td>
+
+                                    <td class="text-center align-middle">
+
+                                        <!-- DETAIL -->
+                                        <a href="{{ route('jabatan.show', $item->id) }}"
+                                           class="btn btn-info btn-sm">
+
+                                            <i class="fas fa-eye"></i>
+
+                                        </a>
+
+                                        <!-- EDIT -->
+                                        <a href="{{ route('jabatan.edit', $item->id) }}"
+                                           class="btn btn-warning btn-sm">
+
+                                            <i class="fas fa-edit"></i>
+
+                                        </a>
+
+                                        <!-- DELETE -->
+                                        <form action="{{ route('jabatan.destroy', $item->id) }}"
+                                              method="POST"
+                                              style="display:inline-block">
+
+                                            @csrf
+                                            @method('DELETE')
+
+                                            <button type="submit"
+                                                    class="btn btn-danger btn-sm"
+                                                    onclick="return confirm('Yakin hapus data?')">
+
+                                                <i class="fas fa-trash"></i>
+
+                                            </button>
+
+                                        </form>
+
+                                    </td>
+
+                                </tr>
+
+                                @empty
+
+                                <tr>
+
+                                    <td colspan="4"
+                                        class="text-center p-5">
+
+                                        <i class="fas fa-folder-open fa-3x text-secondary mb-3"></i>
+
+                                        <br>
+
+                                        <span class="text-secondary">
+                                            Data jabatan belum tersedia
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+
+                                @endforelse
+
+                            </tbody>
+
+                        </table>
 
                     </div>
-
-                </div>
-
-                <!-- Table -->
-                <div class="table-responsive">
-
-                    <table class="table table-bordered table-hover">
-
-                        <thead class="thead-dark text-center">
-
-                            <tr>
-
-                                <th width="5%">No</th>
-                                <th width="10%">Foto</th>
-                                <th>Nama</th>
-                                <th>NIK</th>
-                                <th>Jabatan</th>
-                                <th>Status</th>
-                                <th width="18%">Aksi</th>
-
-                            </tr>
-
-                        </thead>
-
-                        <tbody>
-
-                            @forelse ($penerima as $item)
-
-                            <tr>
-
-                                <!-- Nomor -->
-                                <td class="text-center align-middle">
-
-                                    {{ $loop->iteration }}
-
-                                </td>
-
-                                <!-- Foto -->
-                                <td class="text-center align-middle">
-
-                                    @if($item->foto)
-
-                                        <img src="{{ asset('fotoupload/penerima/' . $item->foto) }}"
-                                             class="img-circle elevation-2"
-                                             width="60"
-                                             height="60"
-                                             style="object-fit: cover;">
-
-                                    @else
-
-                                        <img src="{{ asset('dist/img/user2-160x160.jpg') }}"
-                                             class="img-circle elevation-2"
-                                             width="60"
-                                             height="60">
-
-                                    @endif
-
-                                </td>
-
-                                <!-- Nama -->
-                                <td class="align-middle">
-
-                                    {{ $item->nama }}
-
-                                </td>
-
-                                <!-- NIK -->
-                                <td class="align-middle">
-
-                                    {{ $item->nik }}
-
-                                </td>
-
-                                <!-- Jabatan -->
-                                <td class="align-middle">
-
-                                    {{ $item->jabatan->nama_jabatan ?? '-' }}
-
-                                </td>
-
-                                <!-- Status -->
-                                <td class="text-center align-middle">
-
-                                    <span class="badge badge-success">
-                                        Aktif
-                                    </span>
-
-                                </td>
-
-                                <!-- Aksi -->
-                                <td class="text-center align-middle">
-
-                                    <a href="{{ url('/penerima/' . $item->id) }}"
-                                       class="btn btn-info btn-sm">
-
-                                        <i class="fas fa-eye"></i>
-
-                                    </a>
-
-                                    <a href="{{ url('/penerima/' . $item->id . '/edit') }}"
-                                       class="btn btn-warning btn-sm">
-
-                                        <i class="fas fa-edit"></i>
-
-                                    </a>
-
-                                    <form action="{{ url('/penerima/' . $item->id) }}"
-                                          method="POST"
-                                          class="d-inline">
-
-                                        @csrf
-                                        @method('DELETE')
-
-                                        <button type="submit"
-                                                class="btn btn-danger btn-sm"
-                                                onclick="return confirm('Yakin ingin menghapus data?')">
-
-                                            <i class="fas fa-trash"></i>
-
-                                        </button>
-
-                                    </form>
-
-                                </td>
-
-                            </tr>
-
-                            @empty
-
-                            <tr>
-
-                                <td colspan="7"
-                                    class="text-center text-muted">
-
-                                    Data penerima belum tersedia
-
-                                </td>
-
-                            </tr>
-
-                            @endforelse
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-
-                <!-- Pagination -->
-                <div class="mt-3 d-flex justify-content-end">
-
-                    {{ $penerima->links() }}
 
                 </div>
 
             </div>
 
         </div>
+    </section>
 
-    </div>
-
-</section>
+</div>
 
 @endsection

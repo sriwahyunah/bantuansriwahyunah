@@ -15,7 +15,7 @@ class JabatanController extends Controller
     {
         $jabatan = Jabatan::orderBy('id', 'DESC')->get();
 
-        return view('jabatan.index', [
+        return view('admin.jabatan.index', [
             'jabatan' => $jabatan
         ]);
     }
@@ -25,7 +25,7 @@ class JabatanController extends Controller
      */
     public function create()
     {
-        return view('jabatan.create');
+        return view('admin.jabatan.create');
     }
 
     /**
@@ -55,7 +55,7 @@ class JabatanController extends Controller
     {
         $jabatan = Jabatan::findOrFail($id);
 
-        return view('jabatan.show', compact('jabatan'));
+        return view('admin.jabatan.show', compact('jabatan'));
     }
 
     /**
@@ -65,7 +65,7 @@ class JabatanController extends Controller
     {
         $jabatan = Jabatan::findOrFail($id);
 
-        return view('jabatan.edit', compact('jabatan'));
+        return view('user.jabatan.edit', compact('jabatan'));
     }
 
     /**
