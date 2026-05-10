@@ -1,47 +1,23 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Login Admin</title>
 
-    <!-- ADMIN LTE CSS -->
+    <!-- AdminLTE -->
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
 
-    <!-- FONT AWESOME -->
+    <!-- Font Awesome -->
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-    <style>
-
-        body.login-page{
-            background: #f4f6f9;
-        }
-
-        .login-box{
-            width: 380px;
-        }
-
-        .card{
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .login-logo a{
-            color: #343a40;
-            font-weight: bold;
-        }
-
-        .btn-primary{
-            border-radius: 8px;
-        }
-
-        .form-control{
-            border-radius: 8px;
-        }
-
-    </style>
+    <!-- Google Font -->
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700">
 </head>
 
 <body class="hold-transition login-page">
@@ -50,45 +26,63 @@
 
     <!-- LOGO -->
     <div class="login-logo">
-        <a href="#">
-            <b>ADMIN</b> PANEL
+        <a href="{{ url('/') }}">
+            <b>Bantuan</b>UNA
         </a>
     </div>
 
-    <!-- CARD -->
-    <div class="card shadow-sm">
+    <!-- CARD LOGIN -->
+    <div class="card card-outline card-primary">
 
-        <div class="card-body login-card-body">
+        <div class="card-header text-center">
+            <h3>
+                Login Admin
+            </h3>
+        </div>
+
+        <div class="card-body">
 
             <p class="login-box-msg">
-                Sign in to start your session
+                Silakan login untuk masuk dashboard
             </p>
 
-            {{-- ERROR --}}
+            <!-- ERROR -->
             @if(session('error'))
                 <div class="alert alert-danger">
                     {{ session('error') }}
                 </div>
             @endif
 
-            <!-- FORM -->
+            <!-- VALIDATION ERROR -->
+            @if($errors->any())
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <!-- FORM LOGIN -->
             <form action="{{ route('login.process') }}"
                   method="POST">
 
                 @csrf
 
-                <!-- EMAIL -->
+                <!-- USERNAME -->
                 <div class="input-group mb-3">
 
-                    <input type="email"
-                           name="email"
+                    <input type="text"
+                           name="username"
                            class="form-control"
-                           placeholder="Email"
+                           placeholder="Username"
+                           value="{{ old('username') }}"
                            required>
 
                     <div class="input-group-append">
                         <div class="input-group-text">
-                            <span class="fas fa-envelope"></span>
+                            <span class="fas fa-user"></span>
                         </div>
                     </div>
 
@@ -112,13 +106,19 @@
                 </div>
 
                 <!-- BUTTON -->
-                <button type="submit"
-                        class="btn btn-primary btn-block">
+                <div class="row">
 
-                    <i class="fas fa-sign-in-alt"></i>
-                    Login
+                    <div class="col-12">
 
-                </button>
+                        <button type="submit"
+                                class="btn btn-primary btn-block">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Login
+                        </button>
+
+                    </div>
+
+                </div>
 
             </form>
 
@@ -128,11 +128,23 @@
 
 </div>
 
-<!-- JQUERY -->
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-<!-- ADMIN LTE -->
+<!-- Bootstrap 4 -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- AdminLTE -->
 <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
 
 </body>
 </html>
+```
+
+<form action="{{ route('logout') }}" method="POST">
+    @csrf
+    <button type="submit" class="btn btn-danger">
+        Logout
+    </button>
+</form>
+

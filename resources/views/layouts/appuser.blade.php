@@ -1,123 +1,78 @@
 <!DOCTYPE html>
-<html lang="id">
-
+<html lang="en">
 <head>
 
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>@yield('title')</title>
 
-    {{-- Bootstrap --}}
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-          rel="stylesheet">
-
-    {{-- Font Awesome --}}
+    <!-- Font Awesome -->
     <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+          href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
 
-    <style>
-
-        body{
-            background: #eef2f7;
-        }
-
-        .sidebar{
-            min-height: 100vh;
-            background: #0d6efd;
-        }
-
-        .sidebar a{
-            color: white;
-            text-decoration: none;
-            display: block;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 5px;
-        }
-
-        .sidebar a:hover{
-            background: rgba(255,255,255,0.2);
-        }
-
-    </style>
+    <!-- AdminLTE -->
+    <link rel="stylesheet"
+          href="{{ asset('dist/css/adminlte.min.css') }}">
 
 </head>
 
-<body>
+<body class="hold-transition sidebar-mini layout-fixed">
 
-<div class="container-fluid">
+<div class="wrapper">
 
-    <div class="row">
+    {{-- NAVBAR --}}
+    @include('components.user.navbar')
 
-        {{-- SIDEBAR --}}
-        <div class="col-md-2 sidebar p-3">
+    {{-- SIDEBAR --}}
+    @include('components.user.sidebaradmin')
 
-            <h4 class="text-white mb-4">
+    {{-- CONTENT --}}
+    <div class="content-wrapper">
 
-                <i class="fa-solid fa-user"></i>
-                User Panel
+        {{-- HEADER --}}
+        <section class="content-header">
 
-            </h4>
+            <div class="container-fluid">
 
-            <a href="/">
+                <div class="row mb-2">
 
-                <i class="fa-solid fa-house"></i>
-                Home
+                    <div class="col-sm-6">
+                        <h1>@yield('title')</h1>
+                    </div>
 
-            </a>
+                </div>
 
-            <a href="/program">
+            </div>
 
-                <i class="fa-solid fa-list"></i>
-                Program
+        </section>
 
-            </a>
+        {{-- MAIN CONTENT --}}
+        <section class="content">
 
-            <a href="/kategori">
-
-                <i class="fa-solid fa-layer-group"></i>
-                Kategori
-
-            </a>
-
-            <a href="/kontak">
-
-                <i class="fa-solid fa-envelope"></i>
-                Kontak
-
-            </a>
-
-            <a href="/logout">
-
-                <i class="fa-solid fa-right-from-bracket"></i>
-                Logout
-
-            </a>
-
-        </div>
-
-        {{-- CONTENT --}}
-        <div class="col-md-10">
-
-            {{-- NAVBAR --}}
-            @include('layouts.user.navbar')
-
-            <div class="p-4">
+            <div class="container-fluid">
 
                 @yield('content')
 
             </div>
 
-        </div>
+        </section>
 
     </div>
 
+    {{-- FOOTER --}}
+    @include('components.user.footer')
+
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- jQuery -->
+<script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+
+<!-- Bootstrap -->
+<script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+
+<!-- AdminLTE -->
+<script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
 
 </body>
 </html>

@@ -4,51 +4,108 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Models\Admin;
 
 class UserAuthController extends Controller
 {
-    // =========================
-    // TAMPILKAN FORM LOGIN
-    // =========================
+
+    /*
+    |--------------------------------------------------------------------------
+    | TAMPILKAN HALAMAN LOGIN
+    |--------------------------------------------------------------------------
+    */
+
     public function showLogin()
     {
+
         return view('auth.login-admin');
+
     }
 
-    // =========================
-    // PROSES LOGIN
-    // =========================
+
+    /*
+    |--------------------------------------------------------------------------
+    | PROSES LOGIN
+    |--------------------------------------------------------------------------
+    */
+
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'email'    => ['required', 'email'],
-            'password' => ['required'],
+
+        $request->validate([
+            'username' => 'required',
+            'password' => 'required',
         ]);
 
-        if (Auth::attempt($credentials)) {
+        /*
+        |--------------------------------------------------------------------------
+        | CEK USERNAME
+        |--------------------------------------------------------------------------
+        */
 
-            $request->session()->regenerate();
+        $admin = Admin::where(
+            'username',
+            $request->username
+        )->first();
 
-            return redirect()->route('dashboard');
+        if (!$admin) {
+
+            return back()->with(
+                'error',
+                'Username tidak ditemukan'
+            );
+
         }
 
-        return back()->with([
-            'error' => 'Email atau password salah'
+        /*
+        |--------------------------------------------------------------------------
+        | CEK PASSWORD
+        |--------------------------------------------------------------------------
+        */
+
+        if (!Hash::check(
+            $request->password,
+            $admin->password
+        )) {
+
+            return back()->with(
+                'error',
+                'Password salah'
+            );
+
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | SESSION LOGIN
+        |--------------------------------------------------------------------------
+        */
+
+        session([
+            'login_admin' => true,
+            'id_admin'    => $admin->id,
+            'nama_admin'  => $admin->nama,
+            'username'    => $admin->username,
         ]);
+
+        return redirect()->route('dashboard');
+
     }
 
-    // =========================
-    // LOGOUT
-    // =========================
+
+    /*
+    |--------------------------------------------------------------------------
+    | LOGOUT
+    |--------------------------------------------------------------------------
+    */
+
     public function logout(Request $request)
     {
-        Auth::logout();
 
-        $request->session()->invalidate();
-
-        $request->session()->regenerateToken();
+        session()->flush();
 
         return redirect('/login-admin');
+
     }
 }

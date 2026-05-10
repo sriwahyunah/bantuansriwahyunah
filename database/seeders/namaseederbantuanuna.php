@@ -9,33 +9,27 @@ use Illuminate\Support\Facades\Hash;
 class namaseederbantuanuna extends Seeder
 {
     /**
-     * RUN DATABASE SEEDER
+     * Seed the application's database.
      */
     public function run(): void
     {
 
         /*
         |--------------------------------------------------------------------------
-        | ROLE USER
+        | PERAN ADMIN
         |--------------------------------------------------------------------------
         */
 
-        DB::table('roleuser')->insert([
+        DB::table('peran_admin')->insert([
 
             [
-                'name'       => 'admin',
+                'nama'       => 'Super Admin',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
 
             [
-                'name'       => 'operator',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
-            [
-                'name'       => 'bendahara',
+                'nama'       => 'Admin',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -45,20 +39,20 @@ class namaseederbantuanuna extends Seeder
 
         /*
         |--------------------------------------------------------------------------
-        | ADDRESS
+        | ALAMAT
         |--------------------------------------------------------------------------
         */
 
-        DB::table('address')->insert([
+        DB::table('alamat')->insert([
 
             [
-                'street'     => 'Jl. Banda Aceh - Medan',
-                'village'    => 'Kota Bakti',
-                'district'   => 'Sakti',
-                'regency'    => 'Pidie',
-                'province'   => 'Aceh',
-                'postalcode' => '24111',
-                'country'    => 'Indonesia',
+                'jalan'      => 'Jl. Sudirman',
+                'desa'       => 'Desa Damai',
+                'kecamatan'  => 'Medan Kota',
+                'kabupaten'  => 'Medan',
+                'provinsi'   => 'Sumatera Utara',
+                'kode_pos'   => '20111',
+                'negara'     => 'Indonesia',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -68,153 +62,20 @@ class namaseederbantuanuna extends Seeder
 
         /*
         |--------------------------------------------------------------------------
-        | USER
+        | ADMIN
         |--------------------------------------------------------------------------
         */
 
-        DB::table('user')->insert([
+        DB::table('admin')->insert([
 
             [
-                'idrole'     => 1,
-                'idaddress'  => 1,
-                'name'       => 'Administrator',
-                'username'   => 'admin',
-                'password'   => Hash::make('admin123'),
-                'status'     => 'active',
-                'photo'      => null,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
-            [
-                'idrole'     => 2,
-                'idaddress'  => 1,
-                'name'       => 'Operator',
-                'username'   => 'operator',
-                'password'   => Hash::make('operator123'),
-                'status'     => 'active',
-                'photo'      => null,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
-        ]);
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | CATEGORY BENEFICIARY
-        |--------------------------------------------------------------------------
-        */
-
-        DB::table('categorybeneficiary')->insert([
-
-            [
-                'name'       => 'fakir',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
-            [
-                'name'       => 'miskin',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
-            [
-                'name'       => 'rentan',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
-            [
-                'name'       => 'menengah',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
-        ]);
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | BENEFICIARY
-        |--------------------------------------------------------------------------
-        */
-
-        DB::table('beneficiary')->insert([
-
-            [
-                'idcategorybeneficiary' => 1,
-                'idaddress'             => 1,
-                'nik'                   => '1101010101010001',
-                'kk'                    => '1101010101010001',
-                'name'                  => 'Sri Wahyunah',
-                'username'              => 'sriwahyunah',
-                'password'              => Hash::make('123456'),
-                'phone'                 => '082111111111',
-                'statusacceptance'      => 'accepted',
-                'status'                => 'active',
-                'photo'                 => null,
-                'created_at'            => now(),
-                'updated_at'            => now(),
-            ],
-
-        ]);
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | POSITION
-        |--------------------------------------------------------------------------
-        */
-
-        DB::table('position')->insert([
-
-            [
-                'name'       => 'ketua',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
-            [
-                'name'       => 'sekretaris',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
-            [
-                'name'       => 'bendahara',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
-            [
-                'name'       => 'relawan',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
-        ]);
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | EMPLOYEE
-        |--------------------------------------------------------------------------
-        */
-
-        DB::table('employee')->insert([
-
-            [
-                'idposition' => 1,
-                'idaddress'  => 1,
-                'name'       => 'Ketua Bantuan',
-                'username'   => 'ketua',
+                'id_peran'   => 1,
+                'id_alamat'  => 1,
+                'nama'       => 'Administrator',
+                'username'   => 'admin1',
                 'password'   => Hash::make('123456'),
-                'phone'      => '081234567890',
-                'status'     => 'active',
-                'photo'      => null,
+                'status'     => 'aktif',
+                'foto'       => null,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -224,20 +85,117 @@ class namaseederbantuanuna extends Seeder
 
         /*
         |--------------------------------------------------------------------------
-        | EVENT
+        | KATEGORI PENERIMA
         |--------------------------------------------------------------------------
         */
 
-        DB::table('event')->insert([
+        DB::table('kategori_penerima')->insert([
 
             [
-                'name'       => 'Ramadhan Berbagi',
-                'detail'     => 'Program bantuan bulan Ramadhan',
-                'startdate'  => now(),
-                'enddate'    => now(),
-                'status'     => 'open',
+                'nama'       => 'Masyarakat Tidak Mampu',
                 'created_at' => now(),
                 'updated_at' => now(),
+            ],
+
+            [
+                'nama'       => 'Korban Bencana',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+        ]);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | PENERIMA
+        |--------------------------------------------------------------------------
+        */
+
+        DB::table('penerima')->insert([
+
+            [
+                'id_kategori_penerima' => 1,
+                'id_alamat'            => 1,
+                'nik'                  => '1209123456789001',
+                'kk'                   => '1209123456789002',
+                'nama'                 => 'Budi Santoso',
+                'username'             => 'budi',
+                'password'             => Hash::make('123456'),
+                'telepon'              => '081234567890',
+                'status_verifikasi'    => 'diterima',
+                'status'               => 'aktif',
+                'foto'                 => null,
+                'created_at'           => now(),
+                'updated_at'           => now(),
+            ],
+
+        ]);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | JABATAN
+        |--------------------------------------------------------------------------
+        */
+
+        DB::table('jabatan')->insert([
+
+            [
+                'nama'       => 'Petugas Lapangan',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+            [
+                'nama'       => 'Staff Administrasi',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+        ]);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | PEGAWAI
+        |--------------------------------------------------------------------------
+        */
+
+        DB::table('pegawai')->insert([
+
+            [
+                'id_jabatan' => 1,
+                'id_alamat'  => 1,
+                'nama'       => 'Andi Saputra',
+                'username'   => 'pegawai1',
+                'password'   => Hash::make('123456'),
+                'telepon'    => '081111111111',
+                'status'     => 'aktif',
+                'foto'       => null,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+
+        ]);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | KEGIATAN
+        |--------------------------------------------------------------------------
+        */
+
+        DB::table('kegiatan')->insert([
+
+            [
+                'nama'             => 'Bantuan Sosial Ramadhan',
+                'detail'           => 'Program bantuan untuk masyarakat',
+                'tanggal_mulai'    => now(),
+                'tanggal_selesai'  => now(),
+                'status'           => 'dibuka',
+                'created_at'       => now(),
+                'updated_at'       => now(),
             ],
 
         ]);
@@ -252,149 +210,11 @@ class namaseederbantuanuna extends Seeder
         DB::table('program')->insert([
 
             [
-                'idevent'    => 1,
-                'name'       => 'Bantuan Sembako',
-                'detail'     => 'Pembagian sembako masyarakat',
-                'quota'      => 100,
-                'status'     => 'open',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
-        ]);
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | ASSISTANCE TYPE
-        |--------------------------------------------------------------------------
-        */
-
-        DB::table('assistancetype')->insert([
-
-            [
-                'name'       => 'Sembako',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
-            [
-                'name'       => 'Pendidikan',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
-            [
-                'name'       => 'Kesehatan',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
-        ]);
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | ASSISTANCE
-        |--------------------------------------------------------------------------
-        */
-
-        DB::table('assistance')->insert([
-
-            [
-                'idevent'          => 1,
-                'iduser'           => 1,
-                'assistancecode'   => 'BST001',
-                'assistancename'   => 'Bantuan Tunai',
-                'totalquota'       => 100,
-                'totaldistributed' => 10,
-                'status'           => 'open',
-                'created_at'       => now(),
-                'updated_at'       => now(),
-            ],
-
-        ]);
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | ASSISTANCE DETAIL
-        |--------------------------------------------------------------------------
-        */
-
-        DB::table('assistancedetail')->insert([
-
-            [
-                'idassistance' => 1,
-                'idbeneficiary'=> 1,
-                'amount'       => 500000,
-                'status'       => 'approved',
-                'created_at'   => now(),
-                'updated_at'   => now(),
-            ],
-
-        ]);
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | SUBMISSION
-        |--------------------------------------------------------------------------
-        */
-
-        DB::table('submission')->insert([
-
-            [
-                'idbeneficiary'   => 1,
-                'idassistancetype'=> 1,
-                'title'           => 'Pengajuan Bantuan',
-                'description'     => 'Pengajuan bantuan sembako',
-                'file'            => null,
-                'status'          => 'approved',
-                'created_at'      => now(),
-                'updated_at'      => now(),
-            ],
-
-        ]);
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | DONATION CATEGORY
-        |--------------------------------------------------------------------------
-        */
-
-        DB::table('donationcategory')->insert([
-
-            [
-                'name'       => 'uang',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
-            [
-                'name'       => 'barang',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-
-        ]);
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | DONATION
-        |--------------------------------------------------------------------------
-        */
-
-        DB::table('donation')->insert([
-
-            [
-                'iduser'      => 1,
-                'idevent'     => 1,
-                'donationname'=> 'Donasi Ramadhan',
-                'total'       => 10000000,
-                'status'      => 'open',
+                'id_kegiatan' => 1,
+                'nama'        => 'Program Sembako',
+                'detail'      => 'Pembagian sembako gratis',
+                'kuota'       => 100,
+                'status'      => 'dibuka',
                 'created_at'  => now(),
                 'updated_at'  => now(),
             ],
@@ -404,19 +224,22 @@ class namaseederbantuanuna extends Seeder
 
         /*
         |--------------------------------------------------------------------------
-        | DONATION DETAIL
+        | BANTUAN
         |--------------------------------------------------------------------------
         */
 
-        DB::table('donationdetail')->insert([
+        DB::table('bantuan')->insert([
 
             [
-                'iddonation'   => 1,
-                'donorname'    => 'Hamba Allah',
-                'amount'       => 500000,
-                'paymentstatus'=> 'paid',
-                'created_at'   => now(),
-                'updated_at'   => now(),
+                'id_kegiatan'    => 1,
+                'id_admin'       => 1,
+                'kode_bantuan'   => 'BNT001',
+                'nama_bantuan'   => 'Bantuan Tunai',
+                'total_kuota'    => 100,
+                'terdistribusi'  => 20,
+                'status'         => 'dibuka',
+                'created_at'     => now(),
+                'updated_at'     => now(),
             ],
 
         ]);
@@ -424,16 +247,98 @@ class namaseederbantuanuna extends Seeder
 
         /*
         |--------------------------------------------------------------------------
-        | ARTICLE
+        | DETAIL BANTUAN
         |--------------------------------------------------------------------------
         */
 
-        DB::table('article')->insert([
+        DB::table('detail_bantuan')->insert([
 
             [
-                'title'      => 'Kegiatan Bantuan Sosial',
-                'content'    => 'Kegiatan bantuan sosial berjalan lancar.',
-                'photo'      => null,
+                'id_bantuan'  => 1,
+                'id_penerima' => 1,
+                'jumlah'      => 500000,
+                'status'      => 'disetujui',
+                'created_at'  => now(),
+                'updated_at'  => now(),
+            ],
+
+        ]);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | PENGAJUAN
+        |--------------------------------------------------------------------------
+        */
+
+        DB::table('pengajuan')->insert([
+
+            [
+                'id_penerima' => 1,
+                'judul'       => 'Pengajuan Bantuan Pendidikan',
+                'deskripsi'   => 'Membutuhkan bantuan pendidikan',
+                'file'        => null,
+                'status'      => 'menunggu',
+                'created_at'  => now(),
+                'updated_at'  => now(),
+            ],
+
+        ]);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | DONASI
+        |--------------------------------------------------------------------------
+        */
+
+        DB::table('donasi')->insert([
+
+            [
+                'id_admin'    => 1,
+                'id_kegiatan' => 1,
+                'nama_donasi' => 'Donasi Peduli Sesama',
+                'total'       => 10000000,
+                'status'      => 'dibuka',
+                'created_at'  => now(),
+                'updated_at'  => now(),
+            ],
+
+        ]);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | DETAIL DONASI
+        |--------------------------------------------------------------------------
+        */
+
+        DB::table('detail_donasi')->insert([
+
+            [
+                'id_donasi'         => 1,
+                'nama_donatur'      => 'Hamba Allah',
+                'jumlah'            => 100000,
+                'status_pembayaran' => 'lunas',
+                'created_at'        => now(),
+                'updated_at'        => now(),
+            ],
+
+        ]);
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | ARTIKEL
+        |--------------------------------------------------------------------------
+        */
+
+        DB::table('artikel')->insert([
+
+            [
+                'judul'      => 'Kegiatan Sosial 2026',
+                'konten'     => 'Ini adalah artikel kegiatan sosial.',
+                'foto'       => null,
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -443,16 +348,16 @@ class namaseederbantuanuna extends Seeder
 
         /*
         |--------------------------------------------------------------------------
-        | COMMENT
+        | KOMENTAR
         |--------------------------------------------------------------------------
         */
 
-        DB::table('comment')->insert([
+        DB::table('komentar')->insert([
 
             [
-                'idarticle'  => 1,
-                'name'       => 'Pengunjung',
-                'comment'    => 'Semoga program terus berjalan.',
+                'id_artikel' => 1,
+                'nama'       => 'Pengunjung',
+                'komentar'   => 'Artikel sangat bagus',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
