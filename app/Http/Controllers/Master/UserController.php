@@ -60,14 +60,22 @@ class UserController extends Controller
 
     /*
     |--------------------------------------------------------------------------
-    | SHOW
+    | DETAIL
     |--------------------------------------------------------------------------
     */
 
-    public function show(User $user)
+    public function show($id)
     {
-        return view('admin.user.show', compact('user'));
+        $user = User::findOrFail($id);
+
+        return view(
+            'admin.user.detail',
+            compact('user')
+        );
     }
+
+  
+    
 
     /*
     |--------------------------------------------------------------------------
@@ -86,29 +94,34 @@ class UserController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function update(Request $request, User $user)
+    public function update(Request $request, $id)
     {
         $request->validate([
+
             'name'  => 'required',
-            'email' => 'required|email|unique:users,email,' . $user->id,
+
+            'email' => 'required|email',
+
         ]);
 
-        $data = [
+        $user = User::findOrFail($id);
+
+        $user->update([
+
             'name'  => $request->name,
+
             'email' => $request->email,
-        ];
 
-        if ($request->filled('password')) {
-
-            $data['password'] = Hash::make($request->password);
-
-        }
-
-        $user->update($data);
+        ]);
 
         return redirect()
-            ->route('user.index')
-            ->with('success', 'Data user berhasil diupdate.');
+
+            ->route('admin.user.index')
+
+            ->with(
+                'success',
+                'Data berhasil diupdate'
+            );
     }
 
     /*

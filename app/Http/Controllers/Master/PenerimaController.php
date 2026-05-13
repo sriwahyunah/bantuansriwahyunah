@@ -3,73 +3,300 @@
 namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
-use App\Models\Penerima;
-use App\Models\Status;
-use App\Models\Jabatan;
-use App\Models\Pangkat;
 use Illuminate\Http\Request;
+use App\Models\Penerima;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\File;
 
 class PenerimaController extends Controller
 {
+    /**
+     * INDEX
+     */
     public function index()
     {
-        $penerimas = Penerima::latest()->paginate(10);
+        $penerima = Penerima::latest()->get();
 
-        return view('admin.penerima.index', compact('penerimas'));
+        return view(
+            'admin.penerima.index',
+            compact('penerima')
+        );
     }
 
+    /**
+     * FORM CREATE
+     */
     public function create()
     {
-        return view('admin.penerima.create', [
-            'statuses' => Status::all(),
-            'jabatans' => Jabatan::all(),
-            'pangkats' => Pangkat::all(),
-        ]);
+        return view('admin.penerima.create');
     }
 
+    /**
+     * STORE
+     */
     public function store(Request $request)
     {
         $request->validate([
-            'nik' => 'required|unique:penerimas,nik',
+
+            'nik' => 'required|unique:penerima,nik',
+
+            'kk' => 'required',
+
             'nama' => 'required',
-            'email' => 'required|email|unique:penerimas,email',
-            'no_hp' => 'required',
-            'alamat' => 'required',
-            'status_id' => 'required',
-            'jabatan_id' => 'required',
-            'pangkat_id' => 'required',
-            'password' => 'required|min:6',
-            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+
+            'username' => 'required|unique:penerima,username',
+
+            'password' => 'required',
+
+            'telepon' => 'required',
+
         ]);
 
-        $fotoName = null;
+        /*
+        |--------------------------------------------------------------------------
+        | FOTO
+        |--------------------------------------------------------------------------
+        */
+
+        $foto = null;
 
         if ($request->hasFile('foto')) {
 
-            $foto = $request->file('foto');
+            $file = $request->file('foto');
 
-            $fotoName = time().'_'.$foto->getClientOriginalName();
+            $namaFile = time().'_'.$file->getClientOriginalName();
 
-            $foto->move(public_path('uploads/penerima'), $fotoName);
+            $file->move(
+                public_path('uploads/penerima'),
+                $namaFile
+            );
+
+            $foto = $namaFile;
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | SIMPAN
+        |--------------------------------------------------------------------------
+        */
+
         Penerima::create([
+
+            'id_kategori_penerima' => $request->id_kategori_penerima,
+
+            'id_alamat' => $request->id_alamat,
+
             'nik' => $request->nik,
+
+            'kk' => $request->kk,
+
             'nama' => $request->nama,
-            'email' => $request->email,
-            'no_hp' => $request->no_hp,
-            'alamat' => $request->alamat,
-            'status_id' => $request->status_id,
-            'jabatan_id' => $request->jabatan_id,
-            'pangkat_id' => $request->pangkat_id,
+
+            'username' => $request->username,
+
             'password' => Hash::make($request->password),
-            'foto' => $fotoName,
+
+            'telepon' => $request->telepon,
+
+            'status_verifikasi' => $request->status_verifikasi,
+
+            'status' => $request->status,
+
+            'foto' => $foto,
+
         ]);
 
         return redirect()
-            ->route('penerima.index')
-            ->with('success', 'Data penerima berhasil ditambahkan');
+
+            ->route('admin.penerima.index')
+
+            ->with(
+                'success',
+                'Data penerima berhasil ditambahkan'
+            );
+    }
+
+    /**
+     * DETAIL
+     */
+    public function show($id)
+    {
+        $penerima = Penerima::findOrFail($id);
+
+        return view(
+            'admin.penerima.detail',
+            compact('penerima')
+        );
+    }
+
+    /**
+     * FORM EDIT
+     */
+    public function edit($id)
+    {
+        $penerima = Penerima::findOrFail($id);
+
+        return view(
+            'admin.penerima.edit',
+            compact('penerima')
+        );
+    }
+
+    /**
+     * UPDATE
+     */
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+
+            'nik' => 'required',
+
+            'kk' => 'required',
+
+            'nama' => 'required',
+
+            'username' => 'required',
+
+            'telepon' => 'required',
+
+        ]);
+
+        $penerima = Penerima::findOrFail($id);
+
+        /*
+        |--------------------------------------------------------------------------
+        | FOTO
+        |--------------------------------------------------------------------------
+        */
+
+        $foto = $penerima->foto;
+
+        if ($request->hasFile('foto')) {
+
+            /*
+            |--------------------------------------------------------------------------
+            | HAPUS FOTO LAMA
+            |--------------------------------------------------------------------------
+            */
+
+            if ($penerima->foto != null) {
+
+                $path = public_path(
+                    'uploads/penerima/'.$penerima->foto
+                );
+
+                if (file_exists($path)) {
+
+                    unlink($path);
+                }
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | UPLOAD FOTO BARU
+            |--------------------------------------------------------------------------
+            */
+
+            $file = $request->file('foto');
+
+            $namaFile = time().'_'.$file->getClientOriginalName();
+
+            $file->move(
+                public_path('uploads/penerima'),
+                $namaFile
+            );
+
+            $foto = $namaFile;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | UPDATE DATA
+        |--------------------------------------------------------------------------
+        */
+
+        $data = [
+
+            'id_kategori_penerima' => $request->id_kategori_penerima,
+
+            'id_alamat' => $request->id_alamat,
+
+            'nik' => $request->nik,
+
+            'kk' => $request->kk,
+
+            'nama' => $request->nama,
+
+            'username' => $request->username,
+
+            'telepon' => $request->telepon,
+
+            'status_verifikasi' => $request->status_verifikasi,
+
+            'status' => $request->status,
+
+            'foto' => $foto,
+
+        ];
+
+        /*
+        |--------------------------------------------------------------------------
+        | PASSWORD
+        |--------------------------------------------------------------------------
+        */
+
+        if ($request->password != null) {
+
+            $data['password'] = Hash::make(
+                $request->password
+            );
+        }
+
+        $penerima->update($data);
+
+        return redirect()
+
+            ->route('admin.penerima.index')
+
+            ->with(
+                'success',
+                'Data penerima berhasil diupdate'
+            );
+    }
+
+    /**
+     * DELETE
+     */
+    public function destroy($id)
+    {
+        $penerima = Penerima::findOrFail($id);
+
+        /*
+        |--------------------------------------------------------------------------
+        | HAPUS FOTO
+        |--------------------------------------------------------------------------
+        */
+
+        if ($penerima->foto != null) {
+
+            $path = public_path(
+                'uploads/penerima/'.$penerima->foto
+            );
+
+            if (file_exists($path)) {
+
+                unlink($path);
+            }
+        }
+
+        $penerima->delete();
+
+        return redirect()
+
+            ->route('admin.penerima.index')
+
+            ->with(
+                'success',
+                'Data penerima berhasil dihapus'
+            );
     }
 }

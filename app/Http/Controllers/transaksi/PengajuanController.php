@@ -3,144 +3,252 @@
 namespace App\Http\Controllers\Transaksi;
 
 use App\Http\Controllers\Controller;
-use App\Models\Pengajuan;
-use App\Models\Penerima;
-use App\Models\JenisBantuan;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
+use App\Models\Pengajuan;
 
 class PengajuanController extends Controller
 {
+    /**
+     * INDEX
+     */
     public function index()
     {
-        $pengajuans = Pengajuan::with([
-            'penerima',
-            'jenisBantuan'
-        ])->latest()->paginate(10);
+        $pengajuans = Pengajuan::latest()->get();
 
-        return view('admin.pengajuan.index', compact('pengajuans'));
+        return view(
+            'admin.pengajuan.index',
+            compact('pengajuans')
+        );
     }
 
+    /**
+     * CREATE
+     */
     public function create()
     {
-        $penerimas = Penerima::all();
-
-        $jenisBantuans = JenisBantuan::all();
-
-        return view('admin.pengajuan.create', compact(
-            'penerimas',
-            'jenisBantuans'
-        ));
+        return view('admin.pengajuan.create');
     }
 
+    /**
+     * STORE
+     */
     public function store(Request $request)
     {
         $request->validate([
-            'penerima_id'          => 'required',
-            'jenis_bantuan_id'    => 'required',
-            'judul_pengajuan'     => 'required',
-            'keterangan'          => 'required',
-            'file_pengajuan'      => 'nullable|mimes:pdf,jpg,jpeg,png|max:2048',
+
+            'id_penerima' => 'required',
+
+            'judul' => 'required',
+
+            'deskripsi' => 'required',
+
+            'status' => 'required',
+
         ]);
+
+        /*
+        |--------------------------------------------------------------------------
+        | FILE
+        |--------------------------------------------------------------------------
+        */
 
         $fileName = null;
 
-        if ($request->hasFile('file_pengajuan')) {
+        if ($request->hasFile('file')) {
 
-            $file = $request->file('file_pengajuan');
+            $file = $request->file('file');
 
-            $fileName = time() . '_' . $file->getClientOriginalName();
+            $fileName = time().'_'.$file->getClientOriginalName();
 
-            $file->move(public_path('uploads/pengajuan'), $fileName);
+            $file->move(
+                public_path('uploads/pengajuan'),
+                $fileName
+            );
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | SIMPAN
+        |--------------------------------------------------------------------------
+        */
+
         Pengajuan::create([
-            'penerima_id'          => $request->penerima_id,
-            'jenis_bantuan_id'    => $request->jenis_bantuan_id,
-            'judul_pengajuan'     => $request->judul_pengajuan,
-            'keterangan'          => $request->keterangan,
-            'status'              => 'pending',
-            'file_pengajuan'      => $fileName,
+
+            'id_penerima' => $request->id_penerima,
+
+            'judul' => $request->judul,
+
+            'deskripsi' => $request->deskripsi,
+
+            'file' => $fileName,
+
+            'status' => $request->status,
+
         ]);
 
-        return redirect()->route('pengajuan.index')
-            ->with('success', 'Pengajuan berhasil ditambahkan.');
+        return redirect()
+
+            ->route('admin.pengajuan.index')
+
+            ->with(
+                'success',
+                'Data pengajuan berhasil ditambahkan'
+            );
     }
 
-    public function show(Pengajuan $pengajuan)
+    /**
+     * DETAIL
+     */
+    public function show($id)
     {
-        return view('admin.pengajuan.show', compact('pengajuan'));
+        $pengajuan = Pengajuan::findOrFail($id);
+
+        return view(
+            'admin.pengajuan.detail',
+            compact('pengajuan')
+        );
     }
 
-    public function edit(Pengajuan $pengajuan)
+    /**
+     * EDIT
+     */
+    public function edit($id)
     {
-        $penerimas = Penerima::all();
+        $pengajuan = Pengajuan::findOrFail($id);
 
-        $jenisBantuans = JenisBantuan::all();
-
-        return view('admin.pengajuan.edit', compact(
-            'pengajuan',
-            'penerimas',
-            'jenisBantuans'
-        ));
+        return view(
+            'admin.pengajuan.edit',
+            compact('pengajuan')
+        );
     }
 
-    public function update(Request $request, Pengajuan $pengajuan)
+    /**
+     * UPDATE
+     */
+    public function update(Request $request, $id)
     {
         $request->validate([
-            'penerima_id'          => 'required',
-            'jenis_bantuan_id'    => 'required',
-            'judul_pengajuan'     => 'required',
-            'keterangan'          => 'required',
+
+            'id_penerima' => 'required',
+
+            'judul' => 'required',
+
+            'deskripsi' => 'required',
+
+            'status' => 'required',
+
         ]);
 
-        $data = [
-            'penerima_id'          => $request->penerima_id,
-            'jenis_bantuan_id'    => $request->jenis_bantuan_id,
-            'judul_pengajuan'     => $request->judul_pengajuan,
-            'keterangan'          => $request->keterangan,
-        ];
+        $pengajuan = Pengajuan::findOrFail($id);
 
-        if ($request->hasFile('file_pengajuan')) {
+        /*
+        |--------------------------------------------------------------------------
+        | FILE
+        |--------------------------------------------------------------------------
+        */
 
-            if ($pengajuan->file_pengajuan) {
+        $fileName = $pengajuan->file;
 
-                $oldPath = public_path('uploads/pengajuan/' . $pengajuan->file_pengajuan);
+        if ($request->hasFile('file')) {
 
-                if (File::exists($oldPath)) {
-                    File::delete($oldPath);
+            /*
+            |--------------------------------------------------------------------------
+            | HAPUS FILE LAMA
+            |--------------------------------------------------------------------------
+            */
+
+            if ($pengajuan->file != null) {
+
+                $path = public_path(
+                    'uploads/pengajuan/'.$pengajuan->file
+                );
+
+                if (file_exists($path)) {
+
+                    unlink($path);
                 }
             }
 
-            $file = $request->file('file_pengajuan');
+            /*
+            |--------------------------------------------------------------------------
+            | UPLOAD BARU
+            |--------------------------------------------------------------------------
+            */
 
-            $fileName = time() . '_' . $file->getClientOriginalName();
+            $file = $request->file('file');
 
-            $file->move(public_path('uploads/pengajuan'), $fileName);
+            $fileName = time().'_'.$file->getClientOriginalName();
 
-            $data['file_pengajuan'] = $fileName;
+            $file->move(
+                public_path('uploads/pengajuan'),
+                $fileName
+            );
         }
 
-        $pengajuan->update($data);
+        /*
+        |--------------------------------------------------------------------------
+        | UPDATE
+        |--------------------------------------------------------------------------
+        */
 
-        return redirect()->route('pengajuan.index')
-            ->with('success', 'Pengajuan berhasil diupdate.');
+        $pengajuan->update([
+
+            'id_penerima' => $request->id_penerima,
+
+            'judul' => $request->judul,
+
+            'deskripsi' => $request->deskripsi,
+
+            'file' => $fileName,
+
+            'status' => $request->status,
+
+        ]);
+
+        return redirect()
+
+            ->route('admin.pengajuan.index')
+
+            ->with(
+                'success',
+                'Data pengajuan berhasil diupdate'
+            );
     }
 
-    public function destroy(Pengajuan $pengajuan)
+    /**
+     * DELETE
+     */
+    public function destroy($id)
     {
-        if ($pengajuan->file_pengajuan) {
+        $pengajuan = Pengajuan::findOrFail($id);
 
-            $path = public_path('uploads/pengajuan/' . $pengajuan->file_pengajuan);
+        /*
+        |--------------------------------------------------------------------------
+        | HAPUS FILE
+        |--------------------------------------------------------------------------
+        */
 
-            if (File::exists($path)) {
-                File::delete($path);
+        if ($pengajuan->file != null) {
+
+            $path = public_path(
+                'uploads/pengajuan/'.$pengajuan->file
+            );
+
+            if (file_exists($path)) {
+
+                unlink($path);
             }
         }
 
         $pengajuan->delete();
 
-        return redirect()->route('pengajuan.index')
-            ->with('success', 'Pengajuan berhasil dihapus.');
+        return redirect()
+
+            ->route('admin.pengajuan.index')
+
+            ->with(
+                'success',
+                'Data pengajuan berhasil dihapus'
+            );
     }
 }

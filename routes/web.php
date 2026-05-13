@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 /*
 |--------------------------------------------------------------------------
@@ -139,125 +141,131 @@ Route::middleware(['auth', 'role:admin'])
             '/dashboard',
             [AdminDashboardController::class, 'index']
         )
-            ->name('admin.dashboard');
+            ->name('admin.index');
 
-        /*
+        Route::resource(
+            'penerima',
+            PenerimaController::class
+        )->names('admin.penerima.');
+    });
+
+/*
         |--------------------------------------------------------------------------
         | MASTER
         |--------------------------------------------------------------------------
         */
 
-        Route::resource('user', UserController::class);
+Route::resource('user', UserController::class);
 
-        Route::resource('jabatan', JabatanController::class);
+Route::resource('jabatan', JabatanController::class);
 
-        Route::resource('pangkat', PangkatController::class);
+Route::resource('pangkat', PangkatController::class);
 
-        Route::resource('status', StatusController::class);
+Route::resource('status', StatusController::class);
 
-        Route::resource('tahun', TahunController::class);
+Route::resource('tahun', TahunController::class);
 
-        Route::resource('penerima', PenerimaController::class);
+Route::resource('penerima', PenerimaController::class);
 
-        Route::resource(
-            'kategori-bantuan',
-            KategoriBantuanController::class
-        );
+Route::resource(
+    'kategori-bantuan',
+    KategoriBantuanController::class
+);
 
-        Route::resource(
-            'jenis-bantuan',
-            JenisBantuanController::class
-        );
+Route::resource(
+    'jenis-bantuan',
+    JenisBantuanController::class
+);
 
-        Route::resource(
-            'status-pengajuan',
-            StatusPengajuanController::class
-        );
+Route::resource(
+    'status-pengajuan',
+    StatusPengajuanController::class
+);
 
-        /*
+/*
         |--------------------------------------------------------------------------
         | TRANSAKSI
         |--------------------------------------------------------------------------
         */
 
-        Route::resource(
-            'pengajuan',
-            PengajuanController::class
-        );
+Route::resource(
+    'pengajuan',
+    PengajuanController::class
+);
 
-        Route::resource(
-            'verifikasi',
-            VerifikasiController::class
-        );
+Route::resource(
+    'verifikasi',
+    VerifikasiController::class
+);
 
-        Route::resource(
-            'penyaluran',
-            PenyaluranController::class
-        );
+Route::resource(
+    'penyaluran',
+    PenyaluranController::class
+);
 
-        Route::resource(
-            'bukti-penyaluran',
-            BuktiPenyaluranController::class
-        );
+Route::resource(
+    'bukti-penyaluran',
+    BuktiPenyaluranController::class
+);
 
-        Route::resource(
-            'berita',
-            BeritaController::class
-        );
+Route::resource(
+    'berita',
+    BeritaController::class
+);
 
-        Route::resource(
-            'komentar',
-            KomentarController::class
-        );
+Route::resource(
+    'komentar',
+    KomentarController::class
+);
 
-        /*
+/*
         |--------------------------------------------------------------------------
         | LAPORAN
         |--------------------------------------------------------------------------
         */
 
-        Route::get(
-            '/laporan',
-            [LaporanController::class, 'index']
-        )
-            ->name('laporan.index');
+Route::get(
+    '/laporan',
+    [LaporanController::class, 'index']
+)
+    ->name('laporan.index');
 
-        Route::get(
-            '/laporan-bulanan',
-            [LaporanBulananController::class, 'index']
-        )
-            ->name('laporanbulanan.index');
+Route::get(
+    '/laporan-bulanan',
+    [LaporanBulananController::class, 'index']
+)
+    ->name('laporanbulanan.index');
 
-        Route::get(
-            '/laporan-bulanan/cetak',
-            [LaporanBulananController::class, 'cetak']
-        )
-            ->name('laporanbulanan.cetak');
+Route::get(
+    '/laporan-bulanan/cetak',
+    [LaporanBulananController::class, 'cetak']
+)
+    ->name('laporanbulanan.cetak');
 
-        Route::get(
-            '/laporan-tahunan',
-            [LaporanTahunanController::class, 'index']
-        )
-            ->name('laporantahunan.index');
+Route::get(
+    '/laporan-tahunan',
+    [LaporanTahunanController::class, 'index']
+)
+    ->name('laporantahunan.index');
 
-        Route::get(
-            '/laporan-tahunan/cetak',
-            [LaporanTahunanController::class, 'cetak']
-        )
-            ->name('laporantahunan.cetak');
+Route::get(
+    '/laporan-tahunan/cetak',
+    [LaporanTahunanController::class, 'cetak']
+)
+    ->name('laporantahunan.cetak');
 
-        Route::get(
-            '/laporan-penyaluran',
-            [LaporanPenyaluranController::class, 'index']
-        )
-            ->name('laporanpenyaluran.index');
+Route::get(
+    '/laporan-penyaluran',
+    [LaporanPenyaluranController::class, 'index']
+)
+    ->name('laporanpenyaluran.index');
 
-        Route::get(
-            '/laporan-penyaluran/cetak',
-            [LaporanPenyaluranController::class, 'cetak']
-        )
-            ->name('laporanpenyaluran.cetak');
-    });
+Route::get(
+    '/laporan-penyaluran/cetak',
+    [LaporanPenyaluranController::class, 'cetak']
+)
+    ->name('laporanpenyaluran.cetak');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -302,17 +310,18 @@ Route::middleware(['auth', 'role:petugas'])
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['penerima'])
-    ->prefix('penerima')
-    ->group(function () {
+Route::resource(
+    'penerima',
+    PenerimaController::class
+)->names('admin.penerima');
 
-        Route::get(
-            '/dashboard',
-            [PenerimaDashboardController::class, 'index']
-        )
-            ->name('penerima.index');
 
-    });
+Route::get(
+    '/penerima/{id}/edit',
+    [PenerimaController::class, 'edit']
+)->name('penerima.edit');
+
+
 /*
 |--------------------------------------------------------------------------
 | LOGIN
@@ -356,3 +365,75 @@ Route::middleware(['auth'])
 
 
 Route::get('/user', [UserController::class, 'index']);
+
+/*
+        |--------------------------------------------------------------------------
+        | PENGAJUAN
+        |--------------------------------------------------------------------------
+        */
+
+Route::resource(
+    'pengajuan',
+    PengajuanController::class
+)->names('admin.pengajuan');
+
+Route::get(
+    '/pengajuan/detail/{id}',
+    [PengajuanController::class, 'detail']
+);
+
+Route::get(
+    '/pengajuan/{id}/edit',
+    [PengajuanController::class, 'edit']
+)
+    ->name('pengajuan.edit');
+
+Route::put(
+    '/pengajuan/{id}/update',
+    [PengajuanController::class, 'update']
+)
+    ->name('pengajuan.update');
+
+/*
+|--------------------------------------------------------------------------
+| USER
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/user', [UserController::class, 'index'])
+    ->name('user.index');
+
+Route::get('/user/create', [UserController::class, 'create'])
+    ->name('user.create');
+
+Route::post('/user/store', [UserController::class, 'store'])
+    ->name('user.store');
+
+Route::get('/user/edit/{id}', [UserController::class, 'edit'])
+    ->name('user.edit');
+
+Route::put('/user/update/{id}', [UserController::class, 'update'])
+    ->name('user.update');
+
+Route::delete('/user/delete/{id}', [UserController::class, 'destroy'])
+    ->name('user.delete');
+
+    /*
+|--------------------------------------------------------------------------
+| LOGOUT
+|--------------------------------------------------------------------------
+*/
+
+Route::post('/logout', function () {
+
+    Auth::logout();
+
+    Session::flush();
+
+    request()->session()->invalidate();
+
+    request()->session()->regenerateToken();
+
+    return redirect('/login');
+
+});

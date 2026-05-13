@@ -1,4 +1,4 @@
-@extends('layouts.appuser')
+@extends('layouts.admin')
 
 @section('title', 'Data Pengajuan')
 
@@ -6,86 +6,170 @@
 
 <div class="content-wrapper">
 
-    <section class="content-header">
+<section class="content-header">
 
-        <div class="container-fluid">
+<div class="container-fluid">
 
-            <h1>Data Pengajuan</h1>
+<div class="row mb-2">
 
-        </div>
+<div class="col-sm-6">
 
-    </section>
+<h1>Data Pengajuan</h1>
 
-    <section class="content">
+</div>
 
-        <div class="container-fluid">
+<div class="col-sm-6 text-right">
 
-            <div class="card card-primary card-outline">
+<a href="{{ route('admin.pengajuan.create') }}"
+   class="btn btn-primary">
 
-                <div class="card-header">
+Tambah Pengajuan
 
-                    <a href="{{ route('pengajuan.create') }}"
-                        class="btn btn-primary btn-sm">
+</a>
 
-                        Tambah Pengajuan
+</div>
 
-                    </a>
+</div>
 
-                </div>
+</div>
 
-                <div class="card-body table-responsive">
+</section>
 
-                    <table class="table table-bordered table-striped">
+<section class="content">
 
-                        <thead>
+<div class="container-fluid">
 
-                            <tr>
-                                <th>No</th>
-                                <th>Penerima</th>
-                                <th>Jenis Bantuan</th>
-                                <th>Status</th>
-                                <th>Aksi</th>
-                            </tr>
+@if(session('success'))
 
-                        </thead>
+<div class="alert alert-success">
 
-                        <tbody>
+{{ session('success') }}
 
-                            @foreach($pengajuan as $p)
+</div>
 
-                            <tr>
+@endif
 
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $p->penerima->nama ?? '-' }}</td>
-                                <td>{{ $p->jenis->nama ?? '-' }}</td>
-                                <td>{{ $p->status->nama ?? '-' }}</td>
+<div class="card">
 
-                                <td>
+<div class="card-body table-responsive">
 
-                                    <a href="{{ route('pengajuan.show', $p->id) }}"
-                                        class="btn btn-info btn-sm">
+<table class="table table-bordered">
 
-                                        Detail
+<thead class="bg-primary">
 
-                                    </a>
+<tr>
 
-                                </td>
+<th>No</th>
 
-                            </tr>
+<th>ID Penerima</th>
 
-                            @endforeach
+<th>Judul</th>
 
-                        </tbody>
+<th>Deskripsi</th>
 
-                    </table>
+<th>File</th>
 
-                </div>
+<th>Status</th>
 
-            </div>
+<th width="200">Aksi</th>
 
-        </div>
+</tr>
 
-    </section>
+</thead>
+
+<tbody>
+
+@forelse($pengajuans as $item)
+
+<tr>
+
+<td>{{ $loop->iteration }}</td>
+
+<td>{{ $item->id_penerima }}</td>
+
+<td>{{ $item->judul }}</td>
+
+<td>{{ $item->deskripsi }}</td>
+
+<td>
+
+@if($item->file)
+
+<a href="{{ asset('uploads/pengajuan/'.$item->file) }}"
+   target="_blank">
+
+Lihat File
+
+</a>
+
+@endif
+
+</td>
+
+<td>{{ $item->status }}</td>
+
+<td>
+
+<a href="{{ route('admin.pengajuan.show', $item->id) }}"
+   class="btn btn-info btn-sm">
+
+Detail
+
+</a>
+
+<a href="{{ route('admin.pengajuan.edit', $item->id) }}"
+   class="btn btn-warning btn-sm">
+
+Edit
+
+</a>
+
+<form action="{{ route('admin.pengajuan.destroy', $item->id) }}"
+      method="POST"
+      class="d-inline">
+
+@csrf
+@method('DELETE')
+
+<button class="btn btn-danger btn-sm"
+        onclick="return confirm('Hapus data?')">
+
+Hapus
+
+</button>
+
+</form>
+
+</td>
+
+</tr>
+
+@empty
+
+<tr>
+
+<td colspan="7"
+    class="text-center">
+
+Data pengajuan kosong
+
+</td>
+
+</tr>
+
+@endforelse
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
 
 </div>
 
