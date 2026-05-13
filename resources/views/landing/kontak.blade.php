@@ -1,4 +1,4 @@
-@extends('landing.layout')
+@extends('layouts.guest')
 
 @section('title', 'Kontak')
 
@@ -6,74 +6,58 @@
 
 <div class="container mt-5">
 
-    <div class="card shadow">
+    <div class="row justify-content-center">
 
-        <div class="card-header bg-primary text-white">
-            <h3>Kontak Kami</h3>
-        </div>
+        <div class="col-md-8">
 
-        <div class="card-body">
+            <div class="card">
 
-            <div class="row">
+                <div class="card-header">
 
-                <div class="col-md-6">
+                    <h3>
 
-                    <h4>Informasi Kontak</h4>
+                        Hubungi Kami
 
-                    <p>
-                        Jika ada pertanyaan silakan hubungi kami.
-                    </p>
-
-                    <ul class="list-group">
-
-                        <li class="list-group-item">
-                            <strong>Email :</strong> admin@gmail.com
-                        </li>
-
-                        <li class="list-group-item">
-                            <strong>Telepon :</strong> 08123456789
-                        </li>
-
-                        <li class="list-group-item">
-                            <strong>Alamat :</strong> Indonesia
-                        </li>
-
-                    </ul>
+                    </h3>
 
                 </div>
 
-                <div class="col-md-6">
-
-                    <h4>Kirim Pesan</h4>
+                <div class="card-body">
 
                     <form>
 
-                        <div class="mb-3">
+                        <div class="form-group">
+
                             <label>Nama</label>
 
                             <input type="text"
-                                   class="form-control"
-                                   placeholder="Masukkan nama">
+                                   class="form-control">
+
                         </div>
 
-                        <div class="mb-3">
+                        <div class="form-group">
+
                             <label>Email</label>
 
                             <input type="email"
-                                   class="form-control"
-                                   placeholder="Masukkan email">
+                                   class="form-control">
+
                         </div>
 
-                        <div class="mb-3">
+                        <div class="form-group">
+
                             <label>Pesan</label>
 
                             <textarea class="form-control"
-                                      rows="5"
-                                      placeholder="Tulis pesan"></textarea>
+                                      rows="5"></textarea>
+
                         </div>
 
-                        <button class="btn btn-primary">
+                        <button type="submit"
+                                class="btn btn-primary">
+
                             Kirim Pesan
+
                         </button>
 
                     </form>

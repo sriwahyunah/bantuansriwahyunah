@@ -3,42 +3,67 @@
 namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
+use App\Models\Pangkat;
 use Illuminate\Http\Request;
 
 class PangkatController extends Controller
 {
     public function index()
     {
-        return view('master.pangkat.index');
+        $pangkats = Pangkat::latest()->paginate(10);
+
+        return view('admin.pangkat.index', compact('pangkats'));
     }
 
     public function create()
     {
-        return view('master.pangkat.create');
+        return view('admin.pangkat.create');
     }
 
     public function store(Request $request)
     {
-        return redirect()->route('pangkat.index')->with('success', 'Data berhasil ditambahkan');
+        $request->validate([
+            'nama_pangkat' => 'required',
+        ]);
+
+        Pangkat::create([
+            'nama_pangkat' => $request->nama_pangkat,
+        ]);
+
+        return redirect()->route('pangkat.index')
+            > with('success', 'Data berhasil ditambahkan.');
+
+            
     }
 
-    public function show($id)
+    public function show(Pangkat $pangkat)
     {
-        return view('master.pangkat.show', compact('id'));
+        return view('admin.pangkat.show', compact('pangkat'));
     }
 
-    public function edit($id)
+    public function edit(Pangkat $pangkat)
     {
-        return view('master.pangkat.edit', compact('id'));
+        return view('admin.pangkat.edit', compact('pangkat'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Pangkat $pangkat)
     {
-        return redirect()->route('pangkat.index')->with('success', 'Data berhasil diupdate');
+        $request->validate([
+            'nama_pangkat' => 'required',
+        ]);
+
+        $pangkat->update([
+            'nama_pangkat' => $request->nama_pangkat,
+        ]);
+
+        return redirect()->route('pangkat.index')
+            ->with('success', 'Data berhasil diupdate.');
     }
 
-    public function destroy($id)
+    public function destroy(Pangkat $pangkat)
     {
-        return redirect()->route('pangkat.index')->with('success', 'Data berhasil dihapus');
+        $pangkat->delete();
+        return redirect()->route('pangkat.index')
+            ->with('success', 'Data berhasil dihapus.');
     }
 }

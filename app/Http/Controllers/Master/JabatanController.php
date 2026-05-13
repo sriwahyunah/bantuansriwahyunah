@@ -8,99 +8,57 @@ use Illuminate\Http\Request;
 
 class JabatanController extends Controller
 {
-    /**
-     * DISPLAY DATA
-     */
     public function index()
     {
-        $jabatan = Jabatan::orderBy('id', 'DESC')->get();
+        $jabatans = Jabatan::latest()->paginate(10);
 
-        return view('admin.jabatan.index', [
-            'jabatan' => $jabatan
-        ]);
+        return view('admin.jabatan.index', compact('jabatans'));
     }
 
-    /**
-     * FORM CREATE
-     */
     public function create()
     {
         return view('admin.jabatan.create');
     }
 
-    /**
-     * STORE DATA
-     */
     public function store(Request $request)
     {
         $request->validate([
-            'nama_jabatan' => 'required|max:255',
-            'keterangan'   => 'nullable'
+            'nama_jabatan' => 'required',
         ]);
 
-        Jabatan::create([
-            'nama_jabatan' => $request->nama_jabatan,
-            'keterangan'   => $request->keterangan
-        ]);
+        Jabatan::create($request->all());
 
-        return redirect()
-            ->route('jabatan.index')
-            ->with('success', 'Data berhasil ditambahkan');
+        return redirect()->route('jabatan.index')
+            ->with('success', 'Data berhasil ditambahkan.');
     }
 
-    /**
-     * SHOW DATA
-     */
-    public function show($id)
+    public function show(Jabatan $jabatan)
     {
-        $jabatan = Jabatan::findOrFail($id);
-
         return view('admin.jabatan.show', compact('jabatan'));
     }
 
-    /**
-     * FORM EDIT
-     */
-    public function edit($id)
+    public function edit(Jabatan $jabatan)
     {
-        $jabatan = Jabatan::findOrFail($id);
-
-        return view('user.jabatan.edit', compact('jabatan'));
+        return view('admin.jabatan.edit', compact('jabatan'));
     }
 
-    /**
-     * UPDATE DATA
-     */
-    public function update(Request $request, $id)
+    public function update(Request $request, Jabatan $jabatan)
     {
         $request->validate([
-            'nama_jabatan' => 'required|max:255',
-            'keterangan'   => 'nullable'
+            'nama_jabatan' => 'required',
         ]);
 
-        $jabatan = Jabatan::findOrFail($id);
+        $jabatan->update($request->all());
 
-        $jabatan->update([
-            'nama_jabatan' => $request->nama_jabatan,
-            'keterangan'   => $request->keterangan
-        ]);
-
-        return redirect()
-            ->route('jabatan.index')
-            ->with('success', 'Data berhasil diupdate');
+        return redirect()->route('jabatan.index')
+            ->with('success', 'Data berhasil diupdate.');
     }
 
-    /**
-     * DELETE DATA
-     */
-    public function destroy($id)
+    public function destroy(Jabatan $jabatan)
     {
-        $jabatan = Jabatan::findOrFail($id);
-
         $jabatan->delete();
 
-        return redirect()
-            ->route('jabatan.index')
-            ->with('success', 'Data berhasil dihapus');
+        return redirect()->route('jabatan.index')
+            ->with('success', 'Data berhasil dihapus.');
     }
 }

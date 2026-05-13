@@ -1,27 +1,40 @@
-@extends('landing.layout')
+@extends('layouts.guest')
 
-@section('title', 'Tentang Kami')
+@section('title', 'Tentang')
 
 @section('content')
 
 <div class="container mt-5">
-    <div class="card shadow">
-        <div class="card-header bg-primary text-white">
-            <h3>Tentang Kami</h3>
-        </div>
+
+    <div class="card">
 
         <div class="card-body">
-            <h4>Selamat Datang</h4>
+
+            <h2 class="mb-4">
+
+                Tentang Sistem
+
+            </h2>
 
             <p>
-                Ini adalah halaman tentang website Laravel Anda.
+
+                Sistem Bantuan Sosial merupakan aplikasi yang digunakan
+                untuk pengelolaan data bantuan masyarakat mulai dari
+                pengajuan, verifikasi, hingga penyaluran bantuan.
+
             </p>
 
             <p>
-                Website ini dibuat menggunakan Laravel dan AdminLTE.
+
+                Sistem ini dibuat untuk meningkatkan transparansi,
+                efektivitas, dan efisiensi penyaluran bantuan sosial.
+
             </p>
+
         </div>
+
     </div>
+
 </div>
 
 @endsection

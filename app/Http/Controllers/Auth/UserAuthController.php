@@ -4,25 +4,20 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use App\Models\Admin;
+use Illuminate\Support\Facades\Auth;
 
 class UserAuthController extends Controller
 {
-
     /*
     |--------------------------------------------------------------------------
-    | TAMPILKAN HALAMAN LOGIN
+    | HALAMAN LOGIN
     |--------------------------------------------------------------------------
     */
 
-    public function showLogin()
+    public function login()
     {
-
-        return view('auth.login-admin');
-
+        return view('auth.login-user');
     }
-
 
     /*
     |--------------------------------------------------------------------------
@@ -30,69 +25,49 @@ class UserAuthController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function login(Request $request)
+    public function prosesLogin(Request $request)
     {
+
+        /*
+        |--------------------------------------------------------------------------
+        | VALIDASI
+        |--------------------------------------------------------------------------
+        */
 
         $request->validate([
             'username' => 'required',
-            'password' => 'required',
+            'password' => 'required'
         ]);
 
         /*
         |--------------------------------------------------------------------------
-        | CEK USERNAME
+        | LOGIN
         |--------------------------------------------------------------------------
         */
 
-        $admin = Admin::where(
-            'username',
-            $request->username
-        )->first();
+        $credentials = [
+            'username' => $request->username,
+            'password' => $request->password
+        ];
 
-        if (!$admin) {
+        if (Auth::attempt($credentials)) {
 
-            return back()->with(
-                'error',
-                'Username tidak ditemukan'
-            );
+            $request->session()->regenerate();
 
+            return redirect('/admin/dashboard');
         }
 
         /*
         |--------------------------------------------------------------------------
-        | CEK PASSWORD
+        | GAGAL LOGIN
         |--------------------------------------------------------------------------
         */
 
-        if (!Hash::check(
-            $request->password,
-            $admin->password
-        )) {
-
-            return back()->with(
-                'error',
-                'Password salah'
-            );
-
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | SESSION LOGIN
-        |--------------------------------------------------------------------------
-        */
-
-        session([
-            'login_admin' => true,
-            'id_admin'    => $admin->id,
-            'nama_admin'  => $admin->nama,
-            'username'    => $admin->username,
-        ]);
-
-        return redirect()->route('dashboard');
-
+        return back()->with(
+            'error',
+            'Username atau password salah'
+        );
     }
-
 
     /*
     |--------------------------------------------------------------------------
@@ -102,10 +77,12 @@ class UserAuthController extends Controller
 
     public function logout(Request $request)
     {
+        Auth::logout();
 
-        session()->flush();
+        $request->session()->invalidate();
 
-        return redirect('/login-admin');
+        $request->session()->regenerateToken();
 
+        return redirect('/login-user');
     }
 }

@@ -1,46 +1,54 @@
-@extends('landing.layout')
+@extends('layouts.guest')
 
-@section('title', 'Kategori')
+@section('title', 'Kategori Berita')
 
 @section('content')
 
-<div class="container mt-5">
+<div class="container mt-4">
 
-    <div class="card shadow">
+    <h3 class="mb-4">
 
-        <div class="card-header bg-primary text-white">
-            <h3>Daftar Kategori Bantuan</h3>
-        </div>
+        Kategori :
+        {{ $kategori->nama_kategori }}
 
-        <div class="card-body">
+    </h3>
 
-            <div class="row">
+    <div class="row">
 
-                @foreach($kategori as $k)
+        @foreach ($beritas as $item)
 
-                    <div class="col-md-4 mb-4">
+        <div class="col-md-4">
 
-                        <div class="card border-primary h-100">
+            <div class="card mb-4">
 
-                            <div class="card-body">
+                <div class="card-body">
 
-                                <h4>{{ $k['nama'] }}</h4>
+                    <h5>
 
-                                <p>
-                                    {{ $k['deskripsi'] }}
-                                </p>
+                        {{ $item->judul }}
 
-                            </div>
+                    </h5>
 
-                        </div>
+                    <p>
 
-                    </div>
+                        {{ Str::limit($item->isi, 100) }}
 
-                @endforeach
+                    </p>
+
+                    <a href="{{ route('landing.detailberita', $item->slug) }}"
+                       class="btn btn-primary btn-sm">
+
+                        Detail
+
+                    </a>
+
+                </div>
 
             </div>
 
         </div>
+
+        @endforeach
 
     </div>
 

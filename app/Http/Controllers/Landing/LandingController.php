@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Landing;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use App\Models\Berita;
+use App\Models\Komentar;
+use App\Models\KategoriPenerima;
+
 class LandingController extends Controller
 {
     /*
@@ -15,86 +19,99 @@ class LandingController extends Controller
 
     public function home()
     {
-        $program = collect([
+        $beritas = Berita::where('status', 'publish')
+            ->latest()
+            ->take(6)
+            ->get();
 
-            (object)[
-                'id' => 1,
-                'judul' => 'Bantuan Anak Yatim',
-                'deskripsi' => 'Program bantuan pendidikan dan kebutuhan sekolah anak yatim.',
-                'gambar' => 'anak-yatim.jpg',
-            ],
+        $kategoriPenerimas = KategoriPenerima::latest()->get();
 
-            (object)[
-                'id' => 2,
-                'judul' => 'Bantuan Sembako',
-                'deskripsi' => 'Penyaluran sembako untuk keluarga kurang mampu.',
-                'gambar' => 'sembako.jpg',
-            ],
-
-            (object)[
-                'id' => 3,
-                'judul' => 'Bantuan Pendidikan',
-                'deskripsi' => 'Dukungan biaya pendidikan untuk siswa berprestasi.',
-                'gambar' => 'pendidikan.jpg',
-            ],
-
+        return view('landing.home', [
+            'beritas' => $beritas,
+            'kategoriPenerimas' => $kategoriPenerimas,
         ]);
-
-        return view('landing.home', compact('program'));
     }
 
     /*
     |--------------------------------------------------------------------------
-    | PROGRAM
+    | DETAIL BERITA
     |--------------------------------------------------------------------------
     */
 
-    public function program()
+    public function detailArtikel($slug)
     {
-        $program = collect([
+        $berita = Berita::where('slug', $slug)
+            ->where('status', 'publish')
+            ->firstOrFail();
 
-            (object)[
-                'id' => 1,
-                'judul' => 'Bantuan Anak Yatim',
-                'deskripsi' => 'Program bantuan pendidikan untuk anak yatim.',
-                'gambar' => 'anak-yatim.jpg',
-            ],
+        $komentars = Komentar::latest()->get();
 
-            (object)[
-                'id' => 2,
-                'judul' => 'Bantuan Pendidikan',
-                'deskripsi' => 'Dukungan biaya pendidikan siswa.',
-                'gambar' => 'pendidikan.jpg',
-            ],
+        $beritaLainnya = Berita::where('id', '!=', $berita->id)
+            ->where('status', 'publish')
+            ->latest()
+            ->take(5)
+            ->get();
 
-            (object)[
-                'id' => 3,
-                'judul' => 'Bantuan Kesehatan',
-                'deskripsi' => 'Bantuan kesehatan masyarakat.',
-                'gambar' => 'kesehatan.jpg',
-            ],
-
+        return view('landing.detailartikel', [
+            'berita' => $berita,
+            'komentars' => $komentars,
+            'beritaLainnya' => $beritaLainnya,
         ]);
-
-        return view('landing.program', compact('program'));
     }
 
     /*
     |--------------------------------------------------------------------------
-    | DETAIL PROGRAM
+    | DAFTAR KATEGORI
     |--------------------------------------------------------------------------
     */
 
-    public function detail($id)
+    public function daftarKategori()
     {
-        $program = (object)[
-            'id' => $id,
-            'judul' => 'Detail Program Bantuan',
-            'deskripsi' => 'Ini adalah detail program bantuan sementara tanpa database.',
-            'gambar' => 'default.jpg',
-        ];
+        $kategoriPenerimas = KategoriPenerima::latest()->get();
 
-        return view('landing.detail', compact('program'));
+        return view('landing.daftarkategori', [
+            'kategoriPenerimas' => $kategoriPenerimas,
+        ]);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | DETAIL KATEGORI
+    |--------------------------------------------------------------------------
+    */
+
+    public function kategori($id)
+    {
+        $kategori = KategoriPenerima::findOrFail($id);
+
+        return view('landing.kategori', [
+            'kategori' => $kategori,
+        ]);
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | PENCARIAN BERITA
+    |--------------------------------------------------------------------------
+    */
+
+    public function tag(Request $request)
+    {
+        $search = $request->search;
+
+        $beritas = Berita::where('status', 'publish')
+            ->where(function ($query) use ($search) {
+
+                $query->where('judul', 'like', '%' . $search . '%')
+                      ->orWhere('isi', 'like', '%' . $search . '%');
+            })
+            ->latest()
+            ->paginate(10);
+
+        return view('landing.tag', [
+            'beritas' => $beritas,
+            'search' => $search,
+        ]);
     }
 
     /*
@@ -125,38 +142,14 @@ class LandingController extends Controller
     |--------------------------------------------------------------------------
     */
 
-    public function daftarisi()
+    public function daftarIsi()
     {
-        return view('landing.daftarisi');
-    }
+        $beritas = Berita::where('status', 'publish')
+            ->latest()
+            ->paginate(12);
 
-    /*
-    |--------------------------------------------------------------------------
-    | KATEGORI
-    |--------------------------------------------------------------------------
-    */
-
-    public function kategori()
-    {
-        $kategori = collect([
-
-            (object)[
-                'nama' => 'Pendidikan',
-                'deskripsi' => 'Bantuan pendidikan untuk siswa.',
-            ],
-
-            (object)[
-                'nama' => 'Kesehatan',
-                'deskripsi' => 'Bantuan kesehatan masyarakat.',
-            ],
-
-            (object)[
-                'nama' => 'Sosial',
-                'deskripsi' => 'Bantuan sosial dan kemanusiaan.',
-            ],
-
+        return view('landing.daftarisi', [
+            'beritas' => $beritas,
         ]);
-
-        return view('landing.kategori', compact('kategori'));
     }
 }

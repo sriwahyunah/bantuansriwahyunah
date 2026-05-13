@@ -9,16 +9,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 use App\Http\Controllers\Landing\LandingController;
-use App\Http\Controllers\Auth\UserAuthController;
-use App\Http\Controllers\KategoriController;
-use App\Http\Controllers\ProgramController;
-use App\Http\Controllers\Dashboard\DashboardAdminController;
 
-/*
-|--------------------------------------------------------------------------
-| MASTER CONTROLLERS
-|--------------------------------------------------------------------------
-*/
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\UserAuthController;
+use App\Http\Controllers\Auth\PenerimaAuthController;
+use App\Http\Controllers\Auth\RegisterPenerimaController;
+
+use App\Http\Controllers\Dashboard\AdminDashboardController;
+use App\Http\Controllers\Dashboard\PetugasDashboardController;
+use App\Http\Controllers\Dashboard\PenerimaDashboardController;
 
 use App\Http\Controllers\Master\UserController;
 use App\Http\Controllers\Master\JabatanController;
@@ -30,12 +29,6 @@ use App\Http\Controllers\Master\KategoriBantuanController;
 use App\Http\Controllers\Master\JenisBantuanController;
 use App\Http\Controllers\Master\StatusPengajuanController;
 
-/*
-|--------------------------------------------------------------------------
-| TRANSAKSI CONTROLLERS
-|--------------------------------------------------------------------------
-*/
-
 use App\Http\Controllers\Transaksi\PengajuanController;
 use App\Http\Controllers\Transaksi\VerifikasiController;
 use App\Http\Controllers\Transaksi\PenyaluranController;
@@ -43,13 +36,10 @@ use App\Http\Controllers\Transaksi\BuktiPenyaluranController;
 use App\Http\Controllers\Transaksi\BeritaController;
 use App\Http\Controllers\Transaksi\KomentarController;
 
-/*
-|--------------------------------------------------------------------------
-| ZONA
-|--------------------------------------------------------------------------
-*/
-
-use App\Http\Controllers\ZonaPenerima\ZonaPenerimaController;
+use App\Http\Controllers\Laporan\LaporanController;
+use App\Http\Controllers\Laporan\LaporanBulananController;
+use App\Http\Controllers\Laporan\LaporanTahunanController;
+use App\Http\Controllers\Laporan\LaporanPenyaluranController;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,13 +47,35 @@ use App\Http\Controllers\ZonaPenerima\ZonaPenerimaController;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', [LandingController::class, 'home'])->name('home');
+Route::get('/', [LandingController::class, 'home'])
+    ->name('home');
 
-Route::get('/program', [LandingController::class, 'program'])->name('program');
-Route::get('/program/{id}', [LandingController::class, 'detail'])->name('program.detail');
+Route::get('/berita', [LandingController::class, 'berita'])
+    ->name('landing.berita');
 
-Route::get('/tentang', [LandingController::class, 'tentang'])->name('tentang');
-Route::get('/kontak', [LandingController::class, 'kontak'])->name('kontak');
+Route::get(
+    '/detail-berita/{slug}',
+    [LandingController::class, 'detailBerita']
+)
+    ->name('landing.detailberita');
+
+Route::get(
+    '/kategori/{slug}',
+    [LandingController::class, 'kategori']
+)
+    ->name('landing.kategori');
+
+Route::get(
+    '/tentang',
+    [LandingController::class, 'tentang']
+)
+    ->name('landing.tentang');
+
+Route::get(
+    '/kontak',
+    [LandingController::class, 'kontak']
+)
+    ->name('landing.kontak');
 
 /*
 |--------------------------------------------------------------------------
@@ -71,121 +83,276 @@ Route::get('/kontak', [LandingController::class, 'kontak'])->name('kontak');
 |--------------------------------------------------------------------------
 */
 
-Route::middleware('guest')->group(function () {
+Route::get(
+    '/login-user',
+    [LoginController::class, 'loginUser']
+)
+    ->name('login.user');
 
-    Route::get('/login-admin', [UserAuthController::class, 'showLogin'])->name('login.admin');
-    Route::post('/login-admin', [UserAuthController::class, 'login'])->name('login.process');
-});
+Route::post(
+    '/login-user',
+    [UserAuthController::class, 'login']
+)
+    ->name('login.user.proses');
 
-/*
-|--------------------------------------------------------------------------
-| ADMIN AREA
-|--------------------------------------------------------------------------
-*/
+Route::get(
+    '/login-penerima',
+    [LoginController::class, 'loginPenerima']
+)
+    ->name('login.penerima');
 
-Route::middleware('web')->group(function () {
+Route::post(
+    '/login-penerima',
+    [PenerimaAuthController::class, 'login']
+)
+    ->name('login.penerima.proses');
 
-    Route::get('/dashboard', function () {
+Route::get(
+    '/register-penerima',
+    [RegisterPenerimaController::class, 'index']
+)
+    ->name('register.penerima');
 
-        if (!session('login_admin')) {
-            return redirect()->route('login.admin');
-        }
+Route::post(
+    '/register-penerima',
+    [RegisterPenerimaController::class, 'store']
+)
+    ->name('register.penerima.store');
 
-        return view('dashboard.index');
-    })->name('dashboard');
-
-    /*
-    |--------------------------------------------------------------------------
-    | LOGOUT
-    |--------------------------------------------------------------------------
-    */
-
-    Route::post('/logout', [UserAuthController::class, 'logout'])->name('logout');
-
-    /*
-    |--------------------------------------------------------------------------
-    | MASTER
-    |--------------------------------------------------------------------------
-    */
-
-    Route::resource('user', UserController::class);
-    Route::resource('jabatan', JabatanController::class);
-    Route::resource('pangkat', PangkatController::class);
-    Route::resource('status', StatusController::class);
-    Route::resource('tahun', TahunController::class);
-    Route::resource('penerima', PenerimaController::class);
-
-    Route::resource('kategori-bantuan', KategoriBantuanController::class);
-    Route::resource('jenis-bantuan', JenisBantuanController::class);
-    Route::resource('status-pengajuan', StatusPengajuanController::class);
-
-    /*
-    |--------------------------------------------------------------------------
-    | TRANSAKSI
-    |--------------------------------------------------------------------------
-    */
-
-    Route::resource('pengajuan', PengajuanController::class);
-    Route::resource('verifikasi', VerifikasiController::class);
-    Route::resource('penyaluran', PenyaluranController::class);
-    Route::resource('bukti-penyaluran', BuktiPenyaluranController::class);
-    Route::resource('berita', BeritaController::class);
-    Route::resource('komentar', KomentarController::class);
-
-    /*
-    |--------------------------------------------------------------------------
-    | ZONA PENERIMA
-    |--------------------------------------------------------------------------
-    */
-
-    Route::resource('zona-penerima', ZonaPenerimaController::class);
-
-    /*
-    |--------------------------------------------------------------------------
-    | PROGRAM (FIX SINGLE ROUTE ONLY)
-    |--------------------------------------------------------------------------
-    */
-
-    Route::get('/program-list', [ProgramController::class, 'index'])->name('program.index');
-});
+Route::post(
+    '/logout',
+    [LoginController::class, 'logout']
+)
+    ->name('logout');
 
 /*
 |--------------------------------------------------------------------------
-| 404 FALLBACK
+| ADMIN
 |--------------------------------------------------------------------------
 */
 
-Route::fallback(function () {
-    return response()->view('errors.404', [], 404);
-});
+Route::middleware(['auth', 'role:admin'])
+    ->prefix('admin')
+    ->group(function () {
+
+        Route::get(
+            '/dashboard',
+            [AdminDashboardController::class, 'index']
+        )
+            ->name('admin.dashboard');
+
+        /*
+        |--------------------------------------------------------------------------
+        | MASTER
+        |--------------------------------------------------------------------------
+        */
+
+        Route::resource('user', UserController::class);
+
+        Route::resource('jabatan', JabatanController::class);
+
+        Route::resource('pangkat', PangkatController::class);
+
+        Route::resource('status', StatusController::class);
+
+        Route::resource('tahun', TahunController::class);
+
+        Route::resource('penerima', PenerimaController::class);
+
+        Route::resource(
+            'kategori-bantuan',
+            KategoriBantuanController::class
+        );
+
+        Route::resource(
+            'jenis-bantuan',
+            JenisBantuanController::class
+        );
+
+        Route::resource(
+            'status-pengajuan',
+            StatusPengajuanController::class
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | TRANSAKSI
+        |--------------------------------------------------------------------------
+        */
+
+        Route::resource(
+            'pengajuan',
+            PengajuanController::class
+        );
+
+        Route::resource(
+            'verifikasi',
+            VerifikasiController::class
+        );
+
+        Route::resource(
+            'penyaluran',
+            PenyaluranController::class
+        );
+
+        Route::resource(
+            'bukti-penyaluran',
+            BuktiPenyaluranController::class
+        );
+
+        Route::resource(
+            'berita',
+            BeritaController::class
+        );
+
+        Route::resource(
+            'komentar',
+            KomentarController::class
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | LAPORAN
+        |--------------------------------------------------------------------------
+        */
+
+        Route::get(
+            '/laporan',
+            [LaporanController::class, 'index']
+        )
+            ->name('laporan.index');
+
+        Route::get(
+            '/laporan-bulanan',
+            [LaporanBulananController::class, 'index']
+        )
+            ->name('laporanbulanan.index');
+
+        Route::get(
+            '/laporan-bulanan/cetak',
+            [LaporanBulananController::class, 'cetak']
+        )
+            ->name('laporanbulanan.cetak');
+
+        Route::get(
+            '/laporan-tahunan',
+            [LaporanTahunanController::class, 'index']
+        )
+            ->name('laporantahunan.index');
+
+        Route::get(
+            '/laporan-tahunan/cetak',
+            [LaporanTahunanController::class, 'cetak']
+        )
+            ->name('laporantahunan.cetak');
+
+        Route::get(
+            '/laporan-penyaluran',
+            [LaporanPenyaluranController::class, 'index']
+        )
+            ->name('laporanpenyaluran.index');
+
+        Route::get(
+            '/laporan-penyaluran/cetak',
+            [LaporanPenyaluranController::class, 'cetak']
+        )
+            ->name('laporanpenyaluran.cetak');
+    });
 
 /*
 |--------------------------------------------------------------------------
-| kategori bantuan
+| PETUGAS
 |--------------------------------------------------------------------------
 */
 
-Route::get('/kategori-admin', [KategoriBantuanController::class, 'index'])
-    ->name('kategori-admin.index');
+Route::middleware(['auth', 'role:petugas'])
+    ->prefix('petugas')
+    ->group(function () {
 
-Route::get('/dashboard', [DashboardAdminController::class, 'index'])
-    ->name('dashboard');
+        Route::get(
+            '/dashboard',
+            [PetugasDashboardController::class, 'index']
+        )
+            ->name('petugas.dashboard');
 
-Route::get('/penerima', function () {
-    return 'Halaman Penerima';
-});
+        Route::resource(
+            'pengajuan',
+            PengajuanController::class
+        );
 
-Route::get('/jabatan', function () {
-    return 'Halaman Jabatan';
-});
+        Route::resource(
+            'verifikasi',
+            VerifikasiController::class
+        );
 
-Route::get('/kategori', function () {
-    return 'Halaman Kategori';
-});
+        Route::resource(
+            'penyaluran',
+            PenyaluranController::class
+        );
 
-Route::get('/pengajuan', function () {
-    return 'Halaman Pengajuan';
-});
-Route::resource('penerima', PenerimaController::class);
+        Route::resource(
+            'berita',
+            BeritaController::class
+        );
+    });
 
-Route::resource('jabatan', JabatanController::class);
+/*
+|--------------------------------------------------------------------------
+| PENERIMA
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['penerima'])
+    ->prefix('penerima')
+    ->group(function () {
+
+        Route::get(
+            '/dashboard',
+            [PenerimaDashboardController::class, 'index']
+        )
+            ->name('penerima.index');
+
+    });
+/*
+|--------------------------------------------------------------------------
+| LOGIN
+|--------------------------------------------------------------------------
+*/
+
+Route::get(
+    '/login-user',
+    [UserAuthController::class, 'login']
+)
+    ->name('login.user');
+
+Route::post(
+    '/login-user',
+    [UserAuthController::class, 'prosesLogin']
+)
+    ->name('login.user.proses');
+
+Route::post(
+    '/logout',
+    [UserAuthController::class, 'logout']
+)
+    ->name('logout');
+
+/*
+|--------------------------------------------------------------------------
+| DASHBOARD ADMIN
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth'])
+    ->prefix('admin')
+    ->group(function () {
+
+        Route::get(
+            '/dashboard',
+            [AdminDashboardController::class, 'index']
+        );
+    });
+
+
+
+Route::get('/user', [UserController::class, 'index']);

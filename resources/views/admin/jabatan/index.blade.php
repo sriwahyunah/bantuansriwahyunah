@@ -1,6 +1,21 @@
 @extends('layouts.app')
 
+@section('title', 'Data Jabatan')
+
 @section('content')
+
+<style>
+
+    .table td,
+    .table th{
+        vertical-align: middle !important;
+    }
+
+    .card{
+        border-radius: 15px;
+    }
+
+</style>
 
 <div class="content-wrapper">
 
@@ -11,18 +26,23 @@
             <div class="row mb-3">
 
                 <div class="col-sm-6">
-                    <h1 class="m-0">
+
+                    <h1 class="m-0 font-weight-bold">
                         Data Jabatan
                     </h1>
+
                 </div>
 
                 <div class="col-sm-6 text-right">
-                    <a href="{{ route('jabatan.create') }}"
-                       class="btn btn-primary">
 
-                        <i class="fas fa-plus"></i>
+                    <a href="{{ route('jabatan.create') }}"
+                       class="btn btn-primary shadow-sm">
+
+                        <i class="fas fa-plus mr-1"></i>
                         Tambah Jabatan
+
                     </a>
+
                 </div>
 
             </div>
@@ -34,110 +54,132 @@
     <section class="content">
         <div class="container-fluid">
 
-            <div class="card shadow-sm">
+            <div class="card shadow-sm card-outline card-primary">
 
-                <div class="card-header bg-primary">
+                <!-- CARD HEADER -->
+                <div class="card-header">
 
-                    <h3 class="card-title">
-                        <i class="fas fa-briefcase"></i>
+                    <h3 class="card-title font-weight-bold">
+
+                        <i class="fas fa-briefcase mr-1"></i>
                         Tabel Jabatan
+
                     </h3>
 
                 </div>
 
+                <!-- CARD BODY -->
                 <div class="card-body p-0">
 
-                    <table class="table table-bordered table-hover mb-0">
+                    <div class="table-responsive">
 
-                        <thead class="text-center">
+                        <table class="table table-bordered table-hover mb-0">
 
-                            <tr>
-                                <th width="5%">No</th>
-                                <th>Nama Jabatan</th>
-                                <th>Keterangan</th>
-                                <th width="25%">Aksi</th>
-                            </tr>
+                            <thead class="bg-dark text-white text-center">
 
-                        </thead>
+                                <tr>
 
-                        <tbody>
+                                    <th width="5%">No</th>
+                                    <th>Nama Jabatan</th>
+                                    <th width="20%">Tanggal Dibuat</th>
+                                    <th width="20%">Aksi</th>
 
-                            @forelse($jabatan as $item)
+                                </tr>
 
-                            <tr>
+                            </thead>
 
-                                <td class="text-center">
-                                    {{ $loop->iteration }}
-                                </td>
+                            <tbody>
 
-                                <td>
-                                    {{ $item->nama_jabatan }}
-                                </td>
+                                @forelse($jabatan as $item)
 
-                                <td>
-                                    {{ $item->keterangan }}
-                                </td>
+                                <tr>
 
-                                <td class="text-center">
+                                    <!-- NO -->
+                                    <td class="text-center">
+                                        {{ $loop->iteration }}
+                                    </td>
 
-                                    <a href="{{ route('jabatan.show', $item->id) }}"
-                                       class="btn btn-info btn-sm">
+                                    <!-- NAMA -->
+                                    <td class="font-weight-bold">
+                                        {{ $item->nama }}
+                                    </td>
 
-                                        <i class="fas fa-eye"></i>
-                                    </a>
+                                    <!-- CREATED -->
+                                    <td class="text-center">
 
-                                    <a href="{{ route('jabatan.edit', $item->id) }}"
-                                       class="btn btn-warning btn-sm">
+                                        {{ $item->created_at->format('d M Y') }}
 
-                                        <i class="fas fa-edit"></i>
-                                    </a>
+                                    </td>
 
-                                    <form action="{{ route('jabatan.destroy', $item->id) }}"
-                                          method="POST"
-                                          style="display:inline-block">
+                                    <!-- AKSI -->
+                                    <td class="text-center">
 
-                                        @csrf
-                                        @method('DELETE')
+                                        <!-- DETAIL -->
+                                        <a href="{{ route('jabatan.show', $item->id) }}"
+                                           class="btn btn-info btn-sm">
 
-                                        <button type="submit"
-                                                class="btn btn-danger btn-sm"
-                                                onclick="return confirm('Yakin hapus data?')">
+                                            <i class="fas fa-eye"></i>
 
-                                            <i class="fas fa-trash"></i>
+                                        </a>
 
-                                        </button>
+                                        <!-- EDIT -->
+                                        <a href="{{ route('jabatan.edit', $item->id) }}"
+                                           class="btn btn-warning btn-sm">
 
-                                    </form>
+                                            <i class="fas fa-edit"></i>
 
-                                </td>
+                                        </a>
 
-                            </tr>
+                                        <!-- DELETE -->
+                                        <form action="{{ route('jabatan.destroy', $item->id) }}"
+                                              method="POST"
+                                              class="d-inline">
 
-                            @empty
+                                            @csrf
+                                            @method('DELETE')
 
-                            <tr>
+                                            <button type="submit"
+                                                    class="btn btn-danger btn-sm"
+                                                    onclick="return confirm('Yakin hapus data?')">
 
-                                <td colspan="4" class="text-center p-4">
+                                                <i class="fas fa-trash"></i>
 
-                                    <img src="https://cdn-icons-png.flaticon.com/512/7486/7486740.png"
-                                         width="80"
-                                         class="mb-3">
+                                            </button>
 
-                                    <br>
+                                        </form>
 
-                                    <strong>
-                                        Data jabatan belum tersedia
-                                    </strong>
+                                    </td>
 
-                                </td>
+                                </tr>
 
-                            </tr>
+                                @empty
 
-                            @endforelse
+                                <tr>
 
-                        </tbody>
+                                    <td colspan="4"
+                                        class="text-center p-5">
 
-                    </table>
+                                        <i class="fas fa-folder-open fa-3x text-secondary mb-3"></i>
+
+                                        <br>
+
+                                        <span class="text-secondary">
+
+                                            Data jabatan belum tersedia
+
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+
+                                @endforelse
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
 
                 </div>
 

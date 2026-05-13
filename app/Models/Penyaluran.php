@@ -6,18 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class Penyaluran extends Model
 {
+    protected $table = 'penyaluran';
+
     protected $fillable = [
-        'pengajuan_id',
-        'tanggal_penyaluran',
-        'status'
+        'penerima_id',
+        'tanggal',
+        'jumlah_bantuan',
+        'keterangan',
+        'bukti',
     ];
 
-    public function pengajuan()
+    public function penerima()
     {
-        return $this->belongsTo(Pengajuan::class);
+        return $this->belongsTo(Penerima::class);
     }
 
-    public function bukti()
+    public function buktiPenyaluran()
     {
         return $this->hasOne(BuktiPenyaluran::class);
     }

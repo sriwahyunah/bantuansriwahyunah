@@ -1,0 +1,11 @@
+<footer class="main-footer">
+
+    <strong>
+
+        Copyright &copy; {{ date('Y') }}
+
+    </strong>
+
+    Sistem Bantuan.
+
+</footer>

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Edit User')
 
@@ -10,13 +10,7 @@
 
         <div class="container-fluid">
 
-            <div class="row mb-2">
-
-                <div class="col-sm-6">
-                    <h1>Edit User</h1>
-                </div>
-
-            </div>
+            <h1>Edit User</h1>
 
         </div>
 
@@ -26,19 +20,15 @@
 
         <div class="container-fluid">
 
-            <div class="card card-warning">
+            <div class="card">
 
-                <div class="card-header">
-                    <h3 class="card-title">Form Edit User</h3>
-                </div>
+                <div class="card-body">
 
-                <form action="{{ route('user.update', $user->id) }}"
-                      method="POST">
+                    <form action="{{ route('user.update', $user->id) }}"
+                          method="POST">
 
-                    @csrf
-                    @method('PUT')
-
-                    <div class="card-body">
+                        @csrf
+                        @method('PUT')
 
                         <div class="form-group">
 
@@ -46,8 +36,8 @@
 
                             <input type="text"
                                    name="name"
-                                   value="{{ $user->name }}"
-                                   class="form-control">
+                                   class="form-control"
+                                   value="{{ $user->name }}">
 
                         </div>
 
@@ -57,19 +47,13 @@
 
                             <input type="email"
                                    name="email"
-                                   value="{{ $user->email }}"
-                                   class="form-control">
+                                   class="form-control"
+                                   value="{{ $user->email }}">
 
                         </div>
 
-                    </div>
+                        <button class="btn btn-primary">
 
-                    <div class="card-footer">
-
-                        <button type="submit"
-                                class="btn btn-warning">
-
-                            <i class="fas fa-edit"></i>
                             Update
 
                         </button>
@@ -81,9 +65,9 @@
 
                         </a>
 
-                    </div>
+                    </form>
 
-                </form>
+                </div>
 
             </div>
 

@@ -5,22 +5,41 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Auth;
 
 class RoleMiddleware
 {
     /**
-     * HANDLE ROLE DINAMIS (ADMIN / OPERATOR / DLL)
+     * Handle an incoming request.
      */
+
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
-        if (!auth()->check()) {
-            return redirect('/login');
+        /*
+        |--------------------------------------------------------------------------
+        | CEK LOGIN
+        |--------------------------------------------------------------------------
+        */
+
+        if (!Auth::check()) {
+
+            return redirect('/login')
+                ->with('error', 'Silahkan login terlebih dahulu.');
         }
 
-        if (in_array(auth()->user()->role, $roles)) {
-            return $next($request);
+        /*
+        |--------------------------------------------------------------------------
+        | CEK ROLE USER
+        |--------------------------------------------------------------------------
+        */
+
+        $user = Auth::user();
+
+        if (!in_array($user->role, $roles)) {
+
+            abort(403, 'ANDA TIDAK MEMILIKI AKSES.');
         }
 
-        return redirect('/dashboard')->with('error', 'Anda tidak memiliki akses');
+        return $next($request);
     }
 }

@@ -3,45 +3,38 @@
 namespace App\Http\Controllers\Transaksi;
 
 use App\Http\Controllers\Controller;
+use App\Models\Penyaluran;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class BuktiPenyaluranController extends Controller
 {
-    public function index()
+    public function upload(Request $request, Penyaluran $penyaluran)
     {
-        return view('transaksi.buktipenyaluran.index');
-    }
+        $request->validate([
+            'bukti' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
 
-    public function create()
-    {
-        return view('transaksi.buktipenyaluran.create');
-    }
+        if ($penyaluran->bukti) {
 
-    public function store(Request $request)
-    {
-        return redirect()->route('buktipenyaluran.index')
-            ->with('success', 'Bukti penyaluran berhasil disimpan');
-    }
+            $oldPath = public_path('uploads/penyaluran/' . $penyaluran->bukti);
 
-    public function show($id)
-    {
-        return view('transaksi.buktipenyaluran.show', compact('id'));
-    }
+            if (File::exists($oldPath)) {
+                File::delete($oldPath);
+            }
+        }
 
-    public function edit($id)
-    {
-        return view('transaksi.buktipenyaluran.edit', compact('id'));
-    }
+        $file = $request->file('bukti');
 
-    public function update(Request $request, $id)
-    {
-        return redirect()->route('buktipenyaluran.index')
-            ->with('success', 'Bukti penyaluran berhasil diupdate');
-    }
+        $fileName = time() . '_' . $file->getClientOriginalName();
 
-    public function destroy($id)
-    {
-        return redirect()->route('buktipenyaluran.index')
-            ->with('success', 'Bukti penyaluran berhasil dihapus');
+        $file->move(public_path('uploads/penyaluran'), $fileName);
+
+        $penyaluran->update([
+            'bukti' => $fileName,
+        ]);
+
+        return redirect()->back()
+            ->with('success', 'Bukti penyaluran berhasil diupload.');
     }
 }

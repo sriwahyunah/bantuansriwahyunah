@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Wilayah extends Model
 {
-    protected $fillable = [
-        'nama_wilayah'
-    ];
+    protected $table = 'wilayahs';
 
-    public function penerima()
-    {
-        return $this->hasMany(Penerima::class);
-    }
+    protected $fillable = [
+        'provinsi',
+        'kabupaten',
+        'kecamatan',
+        'desa',
+    ];
 }

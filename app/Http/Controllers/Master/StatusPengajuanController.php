@@ -4,41 +4,110 @@ namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\StatusPengajuan;
 
 class StatusPengajuanController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
-        return view('master.statuspengajuan.index');
+        $statuspengajuans = StatusPengajuan::latest()->get();
+
+        return view(
+            'admin.statuspengajuan.index',
+            compact('statuspengajuans')
+        );
     }
 
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
-        return view('master.statuspengajuan.create');
+        return view('admin.statuspengajuan.create');
     }
 
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
     {
-        return redirect()->route('statuspengajuan.index')->with('success', 'Data berhasil ditambahkan');
+        $request->validate([
+            'nama_status' => 'required|max:255',
+            'keterangan'  => 'nullable'
+        ]);
+
+        StatusPengajuan::create([
+            'nama_status' => $request->nama_status,
+            'keterangan'  => $request->keterangan
+        ]);
+
+        return redirect()
+            ->route('status-pengajuan.index')
+            ->with('success', 'Status pengajuan berhasil ditambahkan');
     }
 
+    /**
+     * Display the specified resource.
+     */
     public function show($id)
     {
-        return view('master.statuspengajuan.show', compact('id'));
+        $statuspengajuan = StatusPengajuan::findOrFail($id);
+
+        return view(
+            'admin.statuspengajuan.show',
+            compact('statuspengajuan')
+        );
     }
 
+    /**
+     * Show the form for editing the specified resource.
+     */
     public function edit($id)
     {
-        return view('master.statuspengajuan.edit', compact('id'));
+        $statuspengajuan = StatusPengajuan::findOrFail($id);
+
+        return view(
+            'admin.statuspengajuan.edit',
+            compact('statuspengajuan')
+        );
     }
 
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(Request $request, $id)
     {
-        return redirect()->route('statuspengajuan.index')->with('success', 'Data berhasil diupdate');
+        $request->validate([
+            'nama_status' => 'required|max:255',
+            'keterangan'  => 'nullable'
+        ]);
+
+        $statuspengajuan = StatusPengajuan::findOrFail($id);
+
+        $statuspengajuan->update([
+            'nama_status' => $request->nama_status,
+            'keterangan'  => $request->keterangan
+        ]);
+
+        return redirect()
+            ->route('status-pengajuan.index')
+            ->with('success', 'Status pengajuan berhasil diupdate');
     }
 
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy($id)
     {
-        return redirect()->route('statuspengajuan.index')->with('success', 'Data berhasil dihapus');
+        $statuspengajuan = StatusPengajuan::findOrFail($id);
+
+        $statuspengajuan->delete();
+
+        return redirect()
+            ->route('status-pengajuan.index')
+            ->with('success', 'Status pengajuan berhasil dihapus');
     }
 }

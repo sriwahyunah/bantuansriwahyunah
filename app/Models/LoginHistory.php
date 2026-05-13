@@ -6,15 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class LoginHistory extends Model
 {
+    protected $table = 'login_histories';
+
     protected $fillable = [
-        'user_id',
+
+        'admin_id',
         'ip_address',
         'user_agent',
-        'login_at'
+        'login_at',
+
     ];
 
-    public function user()
+    /**
+     * Relasi ke admin
+     */
+    public function admin()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Admin::class);
     }
 }

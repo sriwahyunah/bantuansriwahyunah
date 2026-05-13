@@ -1,6 +1,4 @@
-@extends('layouts.appuser')
-
-@section('title', 'Kategori Bantuan')
+@extends('layouts.app')
 
 @section('content')
 
@@ -10,25 +8,7 @@
 
         <div class="container-fluid">
 
-            <div class="row mb-2">
-
-                <div class="col-sm-6">
-                    <h1>Kategori Bantuan</h1>
-                </div>
-
-                <div class="col-sm-6">
-
-                    <a href="{{ route('kategoribantuan.create') }}"
-                        class="btn btn-primary float-sm-right">
-
-                        <i class="fas fa-plus"></i>
-                        Tambah Kategori
-
-                    </a>
-
-                </div>
-
-            </div>
+            <h1>Data Kategori Bantuan</h1>
 
         </div>
 
@@ -38,15 +18,28 @@
 
         <div class="container-fluid">
 
-            <div class="card card-primary card-outline">
+            <div class="card">
 
                 <div class="card-header">
-                    <h3 class="card-title">
-                        Data Kategori Bantuan
-                    </h3>
+
+                    <a href="{{ route('kategoribantuan.create') }}"
+                       class="btn btn-primary">
+
+                        Tambah Data
+
+                    </a>
+
                 </div>
 
-                <div class="card-body table-responsive">
+                <div class="card-body">
+
+                    @if(session('success'))
+
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+
+                    @endif
 
                     <table class="table table-bordered table-striped">
 
@@ -55,35 +48,57 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama Kategori</th>
-                                <th>Aksi</th>
+                                <th>Deskripsi</th>
+                                <th>Status</th>
+                                <th width="200">Aksi</th>
                             </tr>
 
                         </thead>
 
                         <tbody>
 
-                            @forelse($kategori as $k)
+                            @forelse($kategori as $item)
 
                             <tr>
 
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $k->nama }}</td>
+
+                                <td>
+                                    {{ $item->nama_kategori }}
+                                </td>
+
+                                <td>
+                                    {{ $item->deskripsi }}
+                                </td>
+
+                                <td>
+                                    {{ $item->status }}
+                                </td>
 
                                 <td>
 
-                                    <a href="{{ route('kategoribantuan.show', $k->id) }}"
-                                        class="btn btn-info btn-sm">
+                                    <a href="{{ route('kategoribantuan.edit', $item->id) }}"
+                                       class="btn btn-warning btn-sm">
 
-                                        <i class="fas fa-eye"></i>
-
-                                    </a>
-
-                                    <a href="{{ route('kategoribantuan.edit', $k->id) }}"
-                                        class="btn btn-warning btn-sm">
-
-                                        <i class="fas fa-edit"></i>
+                                        Edit
 
                                     </a>
+
+                                    <form action="{{ route('kategoribantuan.destroy', $item->id) }}"
+                                          method="POST"
+                                          style="display:inline;">
+
+                                        @csrf
+                                        @method('DELETE')
+
+                                        <button type="submit"
+                                                class="btn btn-danger btn-sm">
+
+                                            Hapus
+
+                                        </button>
+
+                                    </form>
 
                                 </td>
 
@@ -92,9 +107,13 @@
                             @empty
 
                             <tr>
-                                <td colspan="3" class="text-center">
-                                    Data kosong
+
+                                <td colspan="5" class="text-center">
+
+                                    Data kategori bantuan belum tersedia
+
                                 </td>
+
                             </tr>
 
                             @endforelse

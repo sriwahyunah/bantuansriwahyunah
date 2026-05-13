@@ -6,10 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Jabatan extends Model
 {
-    protected $table = 'jabatan';
+    protected $table = 'jabatans';
 
     protected $fillable = [
         'nama_jabatan',
-        'keterangan'
     ];
+
+    public function penerimas()
+    {
+        return $this->hasMany(Penerima::class);
+    }
 }

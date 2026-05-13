@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class BuktiPenyaluran extends Model
 {
+    protected $table = 'bukti_penyalurans';
+
     protected $fillable = [
         'penyaluran_id',
-        'foto',
-        'keterangan'
+        'foto_bukti',
+        'keterangan',
     ];
 
     public function penyaluran()

@@ -3,42 +3,66 @@
 namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
+use App\Models\Status;
 use Illuminate\Http\Request;
 
 class StatusController extends Controller
 {
     public function index()
     {
-        return view('master.status.index');
+        $statuses = Status::latest()->paginate(10);
+
+        return view('admin.status.index', compact('statuses'));
     }
 
     public function create()
     {
-        return view('master.status.create');
+        return view('admin.status.create');
     }
 
     public function store(Request $request)
     {
-        return redirect()->route('status.index')->with('success', 'Data berhasil ditambahkan');
+        $request->validate([
+            'nama_status' => 'required',
+        ]);
+
+        Status::create([
+            'nama_status' => $request->nama_status,
+        ]);
+
+        return redirect()->route('status.index')
+            ->with('success', 'Data berhasil ditambahkan.');
     }
 
-    public function show($id)
+    public function show(Status $status)
     {
-        return view('master.status.show', compact('id'));
+        return view('admin.status.show', compact('status'));
     }
 
-    public function edit($id)
+    public function edit(Status $status)
     {
-        return view('master.status.edit', compact('id'));
+        return view('admin.status.edit', compact('status'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Status $status)
     {
-        return redirect()->route('status.index')->with('success', 'Data berhasil diupdate');
+        $request->validate([
+            'nama_status' => 'required',
+        ]);
+
+        $status->update([
+            'nama_status' => $request->nama_status,
+        ]);
+
+        return redirect()->route('status.index')
+            ->with('success', 'Data berhasil diupdate.');
     }
 
-    public function destroy($id)
+    public function destroy(Status $status)
     {
-        return redirect()->route('status.index')->with('success', 'Data berhasil dihapus');
+        $status->delete();
+
+        return redirect()->route('status.index')
+            ->with('success', 'Data berhasil dihapus.');
     }
 }

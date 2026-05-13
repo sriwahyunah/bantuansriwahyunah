@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Data User')
 
@@ -6,114 +6,117 @@
 
 <div class="content-wrapper">
 
-    {{-- HEADER --}}
     <section class="content-header">
+
         <div class="container-fluid">
 
-            <div class="row mb-2">
-
-                <div class="col-sm-6">
-                    <h1>Data User</h1>
-                </div>
-
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item">
-                            <a href="{{ url('/dashboard') }}">
-                                Dashboard
-                            </a>
-                        </li>
-
-                        <li class="breadcrumb-item active">
-                            User
-                        </li>
-                    </ol>
-                </div>
-
-            </div>
+            <h1>Data User</h1>
 
         </div>
+
     </section>
 
-    {{-- CONTENT --}}
     <section class="content">
 
         <div class="container-fluid">
 
-            <div class="card card-primary card-outline">
+            @if(session('success'))
 
-                <div class="card-header">
+                <div class="alert alert-success">
 
-                    <h3 class="card-title">
-                        Data User
-                    </h3>
-
-                    <div class="card-tools">
-
-                        <a href="{{ route('user.create') }}"
-                           class="btn btn-primary btn-sm">
-
-                            <i class="fas fa-plus"></i>
-                            Tambah User
-
-                        </a>
-
-                    </div>
+                    {{ session('success') }}
 
                 </div>
 
-                <div class="card-body table-responsive p-0">
+            @endif
 
-                    <table class="table table-bordered table-hover text-nowrap">
+            <div class="card">
 
-                        <thead class="bg-primary">
+                <div class="card-header bg-primary">
 
-                            <tr>
-                                <th width="5%">No</th>
-                                <th>Nama</th>
-                                <th>Email</th>
-                                <th width="20%">Aksi</th>
-                            </tr>
+                    <h3 class="card-title">
+
+                        Data User
+
+                    </h3>
+
+                </div>
+
+                <div class="card-body">
+
+                    <table class="table table-bordered table-hover">
+
+                        <thead>
+
+                        <tr>
+
+                            <th>No</th>
+
+                            <th>Nama</th>
+
+                            <th>Email</th>
+
+                            <th width="200">
+
+                                Aksi
+
+                            </th>
+
+                        </tr>
 
                         </thead>
 
                         <tbody>
 
-                            @forelse($user as $u)
+                        @foreach($users as $item)
 
                             <tr>
 
-                                <td>{{ $loop->iteration }}</td>
+                                <td>
 
-                                <td>{{ $u->name }}</td>
+                                    {{ $loop->iteration }}
 
-                                <td>{{ $u->email }}</td>
+                                </td>
 
                                 <td>
 
-                                    <a href="{{ route('user.show', $u->id) }}"
+                                    {{ $item->name }}
+
+                                </td>
+
+                                <td>
+
+                                    {{ $item->email }}
+
+                                </td>
+
+                                <td>
+
+                                    {{-- DETAIL --}}
+                                    <a href="{{ route('user.show', $item->id) }}"
                                        class="btn btn-info btn-sm">
 
                                         <i class="fas fa-eye"></i>
 
                                     </a>
 
-                                    <a href="{{ route('user.edit', $u->id) }}"
+                                    {{-- EDIT --}}
+                                    <a href="{{ route('user.edit', $item->id) }}"
                                        class="btn btn-warning btn-sm">
 
                                         <i class="fas fa-edit"></i>
 
                                     </a>
 
-                                    <form action="{{ route('user.destroy', $u->id) }}"
+                                    {{-- DELETE --}}
+                                    <form action="{{ route('user.destroy', $item->id) }}"
                                           method="POST"
                                           class="d-inline">
 
                                         @csrf
                                         @method('DELETE')
 
-                                        <button type="submit"
-                                                class="btn btn-danger btn-sm"
+                                        <button class="btn btn-danger btn-sm"
                                                 onclick="return confirm('Yakin hapus data?')">
 
                                             <i class="fas fa-trash"></i>
@@ -126,15 +129,7 @@
 
                             </tr>
 
-                            @empty
-
-                            <tr>
-                                <td colspan="4" class="text-center">
-                                    Data tidak tersedia
-                                </td>
-                            </tr>
-
-                            @endforelse
+                        @endforeach
 
                         </tbody>
 
