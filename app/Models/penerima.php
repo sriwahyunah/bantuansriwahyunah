@@ -2,13 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Penerima extends Model
+class Penerima extends Authenticatable
 {
-    use HasFactory;
-
     /*
     |--------------------------------------------------------------------------
     | TABLE
@@ -32,29 +29,9 @@ class Penerima extends Model
     */
 
     protected $fillable = [
-
-        'id_kategori_penerima',
-
-        'id_alamat',
-
         'nik',
-
-        'kk',
-
-        'nama',
-
         'username',
-
         'password',
-
-        'telepon',
-
-        'status_verifikasi',
-
-        'status',
-
-        'foto',
-
     ];
 
     /*
@@ -64,8 +41,14 @@ class Penerima extends Model
     */
 
     protected $hidden = [
-
         'password',
-
     ];
+
+    /*
+    |--------------------------------------------------------------------------
+    | TIMESTAMP
+    |--------------------------------------------------------------------------
+    */
+
+    public $timestamps = true;
 }

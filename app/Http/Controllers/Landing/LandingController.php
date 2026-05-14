@@ -19,16 +19,16 @@ class LandingController extends Controller
 
     public function home()
     {
-        $beritas = Berita::where('status', 'publish')
+        $berita = Berita::where('status', 'publish')
             ->latest()
             ->take(6)
             ->get();
 
-        $kategoriPenerimas = KategoriPenerima::latest()->get();
+        $kategoriPenerima = KategoriPenerima::latest()->get();
 
         return view('landing.home', [
-            'beritas' => $beritas,
-            'kategoriPenerimas' => $kategoriPenerimas,
+            'berita' => $berita,
+            'kategoriPenerima' => $kategoriPenerima,
         ]);
     }
 
@@ -44,7 +44,7 @@ class LandingController extends Controller
             ->where('status', 'publish')
             ->firstOrFail();
 
-        $komentars = Komentar::latest()->get();
+        $komentar = Komentar::latest()->get();
 
         $beritaLainnya = Berita::where('id', '!=', $berita->id)
             ->where('status', 'publish')
@@ -54,7 +54,7 @@ class LandingController extends Controller
 
         return view('landing.detailartikel', [
             'berita' => $berita,
-            'komentars' => $komentars,
+            'komentar' => $komentar,
             'beritaLainnya' => $beritaLainnya,
         ]);
     }
@@ -67,10 +67,10 @@ class LandingController extends Controller
 
     public function daftarKategori()
     {
-        $kategoriPenerimas = KategoriPenerima::latest()->get();
+        $kategoriPenerima = KategoriPenerima::latest()->get();
 
         return view('landing.daftarkategori', [
-            'kategoriPenerimas' => $kategoriPenerimas,
+            'kategoriPenerima' => $kategoriPenerima,
         ]);
     }
 
@@ -99,7 +99,7 @@ class LandingController extends Controller
     {
         $search = $request->search;
 
-        $beritas = Berita::where('status', 'publish')
+        $berita = Berita::where('status', 'publish')
             ->where(function ($query) use ($search) {
 
                 $query->where('judul', 'like', '%' . $search . '%')
@@ -109,7 +109,7 @@ class LandingController extends Controller
             ->paginate(10);
 
         return view('landing.tag', [
-            'beritas' => $beritas,
+            'berita' => $berita,
             'search' => $search,
         ]);
     }
@@ -144,12 +144,12 @@ class LandingController extends Controller
 
     public function daftarIsi()
     {
-        $beritas = Berita::where('status', 'publish')
+        $berita = Berita::where('status', 'publish')
             ->latest()
             ->paginate(12);
 
         return view('landing.daftarisi', [
-            'beritas' => $beritas,
+            'berita' => $berita,
         ]);
     }
 }

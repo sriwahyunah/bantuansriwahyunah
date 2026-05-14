@@ -18,26 +18,81 @@ class PenerimaAuthController extends Controller
 
     public function login(Request $request)
     {
+        /*
+        |--------------------------------------------------------------------------
+        | VALIDASI
+        |--------------------------------------------------------------------------
+        */
+
         $request->validate([
             'nik'       => 'required',
+            'username'  => 'required',
             'password'  => 'required',
         ]);
 
-        $penerima = Penerima::where('nik', $request->nik)->first();
+        /*
+        |--------------------------------------------------------------------------
+        | CEK NIK + USERNAME
+        |--------------------------------------------------------------------------
+        */
+
+        $penerima = Penerima::where('nik', $request->nik)
+                            ->where('username', $request->username)
+                            ->first();
+
+        /*
+        |--------------------------------------------------------------------------
+        | JIKA DATA TIDAK DITEMUKAN
+        |--------------------------------------------------------------------------
+        */
 
         if (!$penerima) {
-            return back()->with('error', 'NIK tidak ditemukan.');
+
+            return back()->with(
+                'error',
+                'NIK atau Username tidak ditemukan.'
+            );
+
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | CEK PASSWORD
+        |--------------------------------------------------------------------------
+        */
+
         if (!Hash::check($request->password, $penerima->password)) {
-            return back()->with('error', 'Password salah.');
+
+            return back()->with(
+                'error',
+                'Password salah.'
+            );
+
         }
+
+        /*
+        |--------------------------------------------------------------------------
+        | LOGIN
+        |--------------------------------------------------------------------------
+        */
 
         Auth::guard('penerima')->login($penerima);
 
+        /*
+        |--------------------------------------------------------------------------
+        | REGENERATE SESSION
+        |--------------------------------------------------------------------------
+        */
+
         $request->session()->regenerate();
 
-        return redirect()->route('penerima.dashboard');
+        /*
+        |--------------------------------------------------------------------------
+        | REDIRECT DASHBOARD
+        |--------------------------------------------------------------------------
+        */
+
+        return redirect()->route('penerima.index');
     }
 
     /*

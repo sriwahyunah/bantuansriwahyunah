@@ -1,38 +1,38 @@
 @extends('layouts.guest')
 
-@section('title', 'Detail Berita')
-
 @section('content')
 
-<div class="container mt-4">
+<div class="container py-5">
 
-    <div class="card">
+    <div class="card border-0 shadow rounded-4">
 
+        {{-- GAMBAR --}}
         <img src="{{ asset('uploads/berita/' . $berita->gambar) }}"
              class="card-img-top"
-             style="max-height:400px; object-fit:cover;">
+             style="height:450px; object-fit:cover;">
 
-        <div class="card-body">
+        <div class="card-body p-5">
 
-            <h2>
-
+            {{-- JUDUL --}}
+            <h1 class="fw-bold mb-3">
                 {{ $berita->judul }}
+            </h1>
 
-            </h2>
+            {{-- TANGGAL --}}
+            <p class="text-muted mb-4">
 
-            <small class="text-muted">
+                <i class="fas fa-calendar-alt"></i>
 
-                {{ $berita->created_at->format('d M Y') }}
+                {{ $berita->created_at->format('d F Y') }}
 
-            </small>
+            </p>
 
-            <hr>
-
-            <p>
+            {{-- ISI --}}
+            <div class="text-secondary fs-5" style="line-height:1.9;">
 
                 {!! nl2br(e($berita->isi)) !!}
 
-            </p>
+            </div>
 
         </div>
 

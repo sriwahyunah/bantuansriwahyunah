@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Komentar extends Model
 {
-    protected $table = 'komentars';
+    protected $table = 'komentar';
 
     protected $fillable = [
         'berita_id',

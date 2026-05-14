@@ -79,6 +79,20 @@ Route::get(
 )
     ->name('landing.kontak');
 
+Route::get('/berita/{slug}', [LandingController::class, 'detailArtikel'])
+    ->name('detail.berita');
+
+/*
+|--------------------------------------------------------------------------
+| DETAIL ARTIKEL
+|--------------------------------------------------------------------------
+*/
+
+Route::get(
+    '/detail-artikel/{slug}',
+    [LandingController::class, 'detailArtikel']
+)->name('landing.detailartikel');
+
 /*
 |--------------------------------------------------------------------------
 | AUTH
@@ -310,6 +324,26 @@ Route::middleware(['auth', 'role:petugas'])
 |--------------------------------------------------------------------------
 */
 
+Route::get('/login-penerima', function () {
+
+    return view('auth.login-penerima');
+})->name('login.penerima');
+
+Route::middleware(['auth:penerima'])->group(function () {
+
+    Route::get(
+        '/dashboard-penerima',
+        [PenerimaDashboardController::class, 'index']
+    )->name('penerima.index');
+});
+
+
+Route::post(
+    '/login-penerima',
+    [PenerimaAuthController::class, 'login']
+)
+    ->name('penerima.login');
+
 Route::resource(
     'penerima',
     PenerimaController::class
@@ -418,9 +452,9 @@ Route::put('/user/update/{id}', [UserController::class, 'update'])
 Route::delete('/user/delete/{id}', [UserController::class, 'destroy'])
     ->name('user.delete');
 
-    /*
+/*
 |--------------------------------------------------------------------------
-| LOGOUT
+| LOGOUT FIX
 |--------------------------------------------------------------------------
 */
 
@@ -434,6 +468,6 @@ Route::post('/logout', function () {
 
     request()->session()->regenerateToken();
 
-    return redirect('/login');
+    return redirect('/');
 
-});
+})->name('logout');
