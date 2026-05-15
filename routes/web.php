@@ -461,14 +461,20 @@ Route::middleware(['auth', 'role:admin'])
     ->prefix('admin')
     ->group(function () {
 
-        Route::get('/bantuan',
-            [BantuanController::class, 'index'])
+        Route::get(
+            '/bantuan',
+            [BantuanController::class, 'index']
+        )
             ->name('bantuan.index');
 
-        Route::get('/bantuan/{id}',
-            [BantuanController::class, 'show'])
+        Route::get(
+            '/bantuan/{id}',
+            [BantuanController::class, 'show']
+        )
             ->name('bantuan.detail');
 
+        Route::get('/penerima/profil', [PenerimaDashboardController::class, 'profil'])
+            ->name('profil');
     });
 
 /*

@@ -1,73 +1,82 @@
 @extends('layouts.penerima')
 
-@section('title', 'Profil Saya')
+@section('title', 'Profil Penerima')
 
 @section('content')
 
-<div class="card">
+<div class="container py-4">
 
-    <div class="card-header">
+    <div class="row">
 
-        <h3 class="card-title">
+        {{-- CARD FOTO --}}
+        <div class="col-md-4">
 
-            Profil Penerima
+            <div class="card shadow border-0 text-center p-3">
 
-        </h3>
+                <img src="{{ asset('uploads/penerima/' . ($penerima->foto ?? 'default.png')) }}"
+                     class="rounded-circle mx-auto"
+                     width="120"
+                     height="120"
+                     style="object-fit: cover;">
 
-    </div>
+                <h5 class="mt-2">{{ $penerima->nama ?? '-' }}</h5>
+                <small>Penerima Bantuan</small>
 
-    <div class="card-body">
+                <hr>
 
-        <table class="table table-bordered">
+                <span class="badge bg-success">
+                    {{ $penerima->status ?? 'aktif' }}
+                </span>
 
-            <tr>
+            </div>
 
-                <th width="30%">Nama</th>
+        </div>
 
-                <td>{{ $penerima->nama }}</td>
+        {{-- DATA --}}
+        <div class="col-md-8">
 
-            </tr>
+            <div class="card shadow border-0">
 
-            <tr>
+                <div class="card-header bg-primary text-white">
+                    Data Profil
+                </div>
 
-                <th>NIK</th>
+                <div class="card-body">
 
-                <td>{{ $penerima->nik }}</td>
+                    <div class="mb-2">
+                        <label>NIK</label>
+                        <input class="form-control" value="{{ $penerima->nik ?? '-' }}" readonly>
+                    </div>
 
-            </tr>
+                    <div class="mb-2">
+                        <label>KK</label>
+                        <input class="form-control" value="{{ $penerima->kk ?? '-' }}" readonly>
+                    </div>
 
-            <tr>
+                    <div class="mb-2">
+                        <label>Username</label>
+                        <input class="form-control" value="{{ $penerima->username ?? '-' }}" readonly>
+                    </div>
 
-                <th>Email</th>
+                    <div class="mb-2">
+                        <label>Telepon</label>
+                        <input class="form-control" value="{{ $penerima->telepon ?? '-' }}" readonly>
+                    </div>
 
-                <td>{{ $penerima->email }}</td>
+                    <div class="mb-2">
+                        <label>Status Verifikasi</label>
+                        <input class="form-control" value="{{ $penerima->status_verifikasi ?? '-' }}" readonly>
+                    </div>
 
-            </tr>
+                    <a href="{{ route('penerima.dashboard') }}" class="btn btn-secondary mt-3">
+                        Kembali
+                    </a>
 
-            <tr>
+                </div>
 
-                <th>No HP</th>
+            </div>
 
-                <td>{{ $penerima->no_hp }}</td>
-
-            </tr>
-
-            <tr>
-
-                <th>Alamat</th>
-
-                <td>{{ $penerima->alamat }}</td>
-
-            </tr>
-
-        </table>
-
-        <a href="{{ route('penerima.profil.edit') }}"
-           class="btn btn-warning">
-
-            Edit Profil
-
-        </a>
+        </div>
 
     </div>
 

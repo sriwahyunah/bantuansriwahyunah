@@ -62,17 +62,20 @@
 
                 <li class="nav-item">
 
-                    <a href="#"
+                    <a href="{{ route('profil') }}"
                         class="nav-link">
 
                         <i class="nav-icon fas fa-user"></i>
 
-                        <p>Profil</p>
+                        <p>
+
+                            Profil
+
+                        </p>
 
                     </a>
 
                 </li>
-
                 <li class="nav-item">
                     <a href="{{ route('bantuan.index') }}"
                         class="nav-link {{ request()->routeIs('bantuan.*') ? 'active' : '' }}">

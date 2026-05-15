@@ -4,139 +4,368 @@
 
 @section('content')
 
-<div class="container-fluid">
+<div class="content-wrapper">
 
-    <div class="row">
+    {{-- HEADER --}}
+    <section class="content-header">
+        <div class="container-fluid">
 
-        <div class="col-lg-3 col-6">
-            <div class="small-box bg-info shadow">
-                <div class="inner">
-                    <h3>{{ $totalPenerima ?? 0 }}</h3>
-                    <p>Total Penerima</p>
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>
+                        Dashboard Admin
+                    </h1>
                 </div>
 
-                <div class="icon">
-                    <i class="fas fa-users"></i>
-                </div>
-            </div>
-        </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item">
+                            <a href="#">Home</a>
+                        </li>
 
-        <div class="col-lg-3 col-6">
-            <div class="small-box bg-success shadow">
-                <div class="inner">
-                    <h3>{{ $totalPengajuan ?? 0 }}</h3>
-                    <p>Total Pengajuan</p>
-                </div>
-
-                <div class="icon">
-                    <i class="fas fa-file-alt"></i>
+                        <li class="breadcrumb-item active">
+                            Dashboard
+                        </li>
+                    </ol>
                 </div>
             </div>
+
         </div>
+    </section>
 
-        <div class="col-lg-3 col-6">
-            <div class="small-box bg-warning shadow">
-                <div class="inner">
-                    <h3>{{ $pending ?? 0 }}</h3>
-                    <p>Pending</p>
+
+
+    {{-- CONTENT --}}
+    <section class="content">
+
+        <div class="container-fluid">
+
+            {{-- SMALL BOX --}}
+            <div class="row">
+
+                {{-- TOTAL PENERIMA --}}
+                <div class="col-lg-3 col-6">
+
+                    <div class="small-box bg-primary">
+
+                        <div class="inner">
+                            <h3>
+                                {{ $totalPenerima ?? 0 }}
+                            </h3>
+
+                            <p>
+                                Total Penerima
+                            </p>
+                        </div>
+
+                        <div class="icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+
+                        <a href="{{ route('penerima.index') }}"
+                           class="small-box-footer">
+
+                            Detail
+                            <i class="fas fa-arrow-circle-right"></i>
+
+                        </a>
+
+                    </div>
+
                 </div>
 
-                <div class="icon">
-                    <i class="fas fa-clock"></i>
+
+
+                {{-- TOTAL PENGAJUAN --}}
+                <div class="col-lg-3 col-6">
+
+                    <div class="small-box bg-success">
+
+                        <div class="inner">
+                            <h3>
+                                {{ $totalPengajuan ?? 0 }}
+                            </h3>
+
+                            <p>
+                                Total Pengajuan
+                            </p>
+                        </div>
+
+                        <div class="icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+
+                        <a href="{{ route('pengajuan.index') }}"
+                           class="small-box-footer">
+
+                            Detail
+                            <i class="fas fa-arrow-circle-right"></i>
+
+                        </a>
+
+                    </div>
+
                 </div>
+
+
+
+                {{-- TOTAL PENYALURAN --}}
+                <div class="col-lg-3 col-6">
+
+                    <div class="small-box bg-warning">
+
+                        <div class="inner">
+                            <h3>
+                                {{ $totalPenyaluran ?? 0 }}
+                            </h3>
+
+                            <p>
+                                Bantuan Disalurkan
+                            </p>
+                        </div>
+
+                        <div class="icon">
+                            <i class="fas fa-hand-holding-heart"></i>
+                        </div>
+
+                        <a href="{{ route('penyaluran.index') }}"
+                           class="small-box-footer">
+
+                            Detail
+                            <i class="fas fa-arrow-circle-right"></i>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+
+                {{-- TOTAL BERITA --}}
+                <div class="col-lg-3 col-6">
+
+                    <div class="small-box bg-danger">
+
+                        <div class="inner">
+                            <h3>
+                                {{ $totalBerita ?? 0 }}
+                            </h3>
+
+                            <p>
+                                Total Berita
+                            </p>
+                        </div>
+
+                        <div class="icon">
+                            <i class="fas fa-newspaper"></i>
+                        </div>
+
+                        <a href="{{ route('berita.index') }}"
+                           class="small-box-footer">
+
+                            Detail
+                            <i class="fas fa-arrow-circle-right"></i>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
             </div>
-        </div>
 
-        <div class="col-lg-3 col-6">
-            <div class="small-box bg-danger shadow">
-                <div class="inner">
-                    <h3>{{ $ditolak ?? 0 }}</h3>
-                    <p>Ditolak</p>
+
+
+            {{-- TABLE --}}
+            <div class="row">
+
+                <div class="col-md-8">
+
+                    <div class="card">
+
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                Data Pengajuan Terbaru
+                            </h3>
+                        </div>
+
+                        <div class="card-body table-responsive p-0">
+
+                            <table class="table table-hover text-nowrap">
+
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Nama</th>
+                                        <th>Jenis Bantuan</th>
+                                        <th>Status</th>
+                                        <th>Tanggal</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    @forelse($pengajuanTerbaru as $item)
+
+                                    <tr>
+
+                                        <td>
+                                            {{ $loop->iteration }}
+                                        </td>
+
+                                        <td>
+                                            {{ $item->penerima->nama ?? '-' }}
+                                        </td>
+
+                                        <td>
+                                            {{ $item->jenisBantuan->nama ?? '-' }}
+                                        </td>
+
+                                        <td>
+
+                                            @if($item->status == 'Disetujui')
+
+                                                <span class="badge badge-success">
+                                                    Disetujui
+                                                </span>
+
+                                            @elseif($item->status == 'Pending')
+
+                                                <span class="badge badge-warning">
+                                                    Pending
+                                                </span>
+
+                                            @else
+
+                                                <span class="badge badge-danger">
+                                                    Ditolak
+                                                </span>
+
+                                            @endif
+
+                                        </td>
+
+                                        <td>
+                                            {{ date('d M Y', strtotime($item->created_at)) }}
+                                        </td>
+
+                                    </tr>
+
+                                    @empty
+
+                                    <tr>
+
+                                        <td colspan="5" class="text-center">
+                                            Tidak ada data
+                                        </td>
+
+                                    </tr>
+
+                                    @endforelse
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
                 </div>
 
-                <div class="icon">
-                    <i class="fas fa-times-circle"></i>
-                </div>
-            </div>
-        </div>
 
-    </div>
 
-    <div class="card shadow border-0 mt-4">
+                {{-- INFORMASI --}}
+                <div class="col-md-4">
 
-        <div class="card-header bg-white">
-            <h5 class="mb-0">
-                Pengajuan Terbaru
-            </h5>
-        </div>
+                    <div class="card">
 
-        <div class="card-body table-responsive">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                Informasi Sistem
+                            </h3>
+                        </div>
 
-            <table class="table table-bordered table-hover">
+                        <div class="card-body">
 
-                <thead class="thead-light">
-                    <tr>
-                        <th>No</th>
-                        <th>Status</th>
-                        <th>Tanggal</th>
-                    </tr>
-                </thead>
+                            <strong>Login Sebagai :</strong>
+                            <p>
+                                {{ Auth::user()->name }}
+                            </p>
 
-                <tbody>
+                            <hr>
 
-                    @forelse($pengajuanTerbaru as $item)
+                            <strong>Tanggal :</strong>
+                            <p>
+                                {{ date('d F Y') }}
+                            </p>
 
-                    <tr>
+                            <hr>
 
-                        <td>{{ $loop->iteration }}</td>
+                            <strong>Status :</strong>
 
-                        <td>
-
-                            @if($item->status == 'diterima')
-
+                            <p>
                                 <span class="badge badge-success">
-                                    Diterima
+                                    Sistem Aktif
                                 </span>
+                            </p>
 
-                            @elseif($item->status == 'ditolak')
+                        </div>
 
-                                <span class="badge badge-danger">
-                                    Ditolak
-                                </span>
+                    </div>
 
-                            @else
 
-                                <span class="badge badge-warning">
-                                    Pending
-                                </span>
 
-                            @endif
+                    <div class="card">
 
-                        </td>
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                Menu Cepat
+                            </h3>
+                        </div>
 
-                        <td>
-                            {{ $item->created_at ?? '-' }}
-                        </td>
+                        <div class="card-body">
 
-                    </tr>
+                            <a href="{{ route('pengajuan.index') }}"
+                               class="btn btn-primary btn-block mb-2">
 
-                    @empty
+                                Data Pengajuan
 
-                    <tr>
-                        <td colspan="3" class="text-center">
-                            Tidak ada data
-                        </td>
-                    </tr>
+                            </a>
 
-                    @endforelse
+                            <a href="{{ route('verifikasi.index') }}"
+                               class="btn btn-success btn-block mb-2">
 
-                </tbody>
+                                Verifikasi
 
-            </table>
+                            </a>
+
+                            <a href="{{ route('penyaluran.index') }}"
+                               class="btn btn-warning btn-block mb-2">
+
+                                Penyaluran
+
+                            </a>
+
+                            <a href="{{ route('laporan.index') }}"
+                               class="btn btn-danger btn-block">
+
+                                Laporan
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
 
         </div>
 
-    </div>
+    </section>
 
 </div>
 
