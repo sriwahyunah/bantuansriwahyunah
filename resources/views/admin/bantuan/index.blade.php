@@ -6,40 +6,82 @@
 
 <div class="content-wrapper">
 
+    {{-- HEADER --}}
     <section class="content-header">
 
         <div class="container-fluid">
 
-            <h1>
+            <div class="row mb-2">
 
-                Data Bantuan
+                <div class="col-sm-6">
 
-            </h1>
+                    <h1>
+
+                        <i class="fas fa-hand-holding-heart"></i>
+                        Data Bantuan
+
+                    </h1>
+
+                </div>
+
+            </div>
 
         </div>
 
     </section>
 
+    {{-- CONTENT --}}
     <section class="content">
 
         <div class="container-fluid">
 
             <div class="card card-success card-outline">
 
+                <div class="card-header">
+
+                    <h3 class="card-title">
+
+                        Daftar Bantuan Sosial
+
+                    </h3>
+
+                </div>
+
                 <div class="card-body table-responsive">
 
                     <table class="table table-bordered table-hover">
 
-                        <thead>
+                        <thead class="bg-light">
 
                             <tr>
 
-                                <th>No</th>
-                                <th>Kode</th>
-                                <th>Nama Bantuan</th>
-                                <th>Kuota</th>
-                                <th>Status</th>
-                                <th>Aksi</th>
+                                <th width="5%">
+                                    No
+                                </th>
+
+                                <th>
+                                    Kode Bantuan
+                                </th>
+
+                                <th>
+                                    Nama Bantuan
+                                </th>
+
+                                <th>
+                                    Total Kuota
+                                </th>
+
+                                <th>
+                                    Terdistribusi
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th width="15%">
+                                    Aksi
+                                </th>
 
                             </tr>
 
@@ -59,7 +101,11 @@
 
                                 <td>
 
-                                    {{ $item->kode_bantuan }}
+                                    <span class="badge badge-info">
+
+                                        {{ $item->kode_bantuan }}
+
+                                    </span>
 
                                 </td>
 
@@ -72,6 +118,12 @@
                                 <td>
 
                                     {{ $item->total_kuota }}
+
+                                </td>
+
+                                <td>
+
+                                    {{ $item->terdistribusi }}
 
                                 </td>
 
@@ -102,6 +154,7 @@
                                     <a href="{{ route('bantuan.detail', $item->id) }}"
                                        class="btn btn-info btn-sm">
 
+                                        <i class="fas fa-eye"></i>
                                         Detail
 
                                     </a>
@@ -114,10 +167,10 @@
 
                             <tr>
 
-                                <td colspan="6"
+                                <td colspan="7"
                                     class="text-center">
 
-                                    Data bantuan kosong
+                                    Data bantuan belum tersedia
 
                                 </td>
 

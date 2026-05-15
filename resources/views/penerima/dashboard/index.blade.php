@@ -1,203 +1,50 @@
+@php
+use Illuminate\Support\Str;
+@endphp
+
 @extends('layouts.penerima')
 
 @section('title', 'Dashboard Penerima')
 
 @section('content')
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<div class="container-fluid">
 
-<style>
+    {{-- HERO SECTION --}}
+    <div class="card border-0 shadow-lg mb-4"
+         style="border-radius:20px;
+                background:linear-gradient(135deg,#0d6efd,#3d8bfd);">
 
-body{
-    background:#eef3f8;
-    font-family:'Poppins',sans-serif;
-}
+        <div class="card-body p-4 text-white">
 
-/* HEADER */
-.dashboard-header{
-    background:linear-gradient(135deg,#0d6efd,#4f8cff);
-    border-radius:30px;
-    padding:40px;
-    color:white;
-    position:relative;
-    overflow:hidden;
-    box-shadow:0 15px 35px rgba(13,110,253,.2);
-}
+            <div class="row align-items-center">
 
-.dashboard-header::before{
-    content:'';
-    position:absolute;
-    width:300px;
-    height:300px;
-    border-radius:50%;
-    background:rgba(255,255,255,.08);
-    top:-100px;
-    right:-100px;
-}
+                <div class="col-md-8">
 
-.dashboard-header h1{
-    font-size:42px;
-    font-weight:800;
-}
+                    <h2 class="font-weight-bold mb-2">
+                        Selamat Datang 👋
+                    </h2>
 
-.dashboard-header p{
-    opacity:.9;
-    font-size:17px;
-}
+                    <p class="mb-3" style="font-size:16px;">
+                        Kelola pengajuan bantuan sosial Anda dengan mudah,
+                        cepat, dan transparan.
+                    </p>
 
-/* CARD */
-.dashboard-card{
-    background:white;
-    border-radius:25px;
-    padding:30px;
-    transition:.3s;
-    box-shadow:0 10px 25px rgba(0,0,0,.05);
-    height:100%;
-}
+                    <a href="/pengajuan"
+                       class="btn btn-light btn-sm px-4">
+                        <i class="fas fa-plus"></i>
+                        Ajukan Bantuan
+                    </a>
 
-.dashboard-card:hover{
-    transform:translateY(-8px);
-}
+                </div>
 
-.dashboard-icon{
-    width:70px;
-    height:70px;
-    border-radius:20px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:30px;
-    margin-bottom:20px;
-}
+                <div class="col-md-4 text-center">
 
-.bg-primary-soft{
-    background:rgba(13,110,253,.1);
-    color:#0d6efd;
-}
+                    <i class="fas fa-hand-holding-heart"
+                       style="font-size:90px; opacity:0.2;">
+                    </i>
 
-.bg-success-soft{
-    background:rgba(25,135,84,.1);
-    color:#198754;
-}
-
-.bg-warning-soft{
-    background:rgba(255,193,7,.15);
-    color:#ff9800;
-}
-
-.bg-danger-soft{
-    background:rgba(220,53,69,.1);
-    color:#dc3545;
-}
-
-.dashboard-card h4{
-    font-size:18px;
-    color:#64748b;
-    margin-bottom:10px;
-}
-
-.dashboard-card h2{
-    font-size:38px;
-    font-weight:800;
-    color:#0f172a;
-}
-
-/* MENU */
-.menu-card{
-    background:white;
-    border-radius:25px;
-    padding:25px;
-    box-shadow:0 10px 25px rgba(0,0,0,.05);
-}
-
-.menu-btn{
-    width:100%;
-    border:none;
-    border-radius:18px;
-    padding:18px;
-    background:#f8fbff;
-    transition:.3s;
-    text-decoration:none;
-    display:block;
-    color:#0f172a;
-    font-weight:600;
-}
-
-.menu-btn:hover{
-    background:#0d6efd;
-    color:white;
-    transform:translateY(-5px);
-}
-
-.menu-btn i{
-    font-size:28px;
-    margin-bottom:10px;
-    display:block;
-}
-
-/* TABLE */
-.riwayat-card{
-    background:white;
-    border-radius:25px;
-    padding:30px;
-    margin-top:30px;
-    box-shadow:0 10px 25px rgba(0,0,0,.05);
-}
-
-.table{
-    margin-bottom:0;
-}
-
-.table th{
-    background:#f8fbff;
-    color:#0f172a;
-    border:none;
-}
-
-.table td{
-    vertical-align:middle;
-}
-
-/* RESPONSIVE */
-@media(max-width:768px){
-
-    .dashboard-header{
-        padding:30px;
-    }
-
-    .dashboard-header h1{
-        font-size:30px;
-    }
-
-}
-
-</style>
-
-<div class="container-fluid py-4">
-
-    {{-- HEADER --}}
-    <div class="dashboard-header mb-4">
-
-        <div class="row align-items-center">
-
-            <div class="col-md-8">
-
-                <h1>
-                    Dashboard Penerima
-                </h1>
-
-                <p>
-                    Selamat datang di sistem bantuan sosial.
-                    Kelola pengajuan bantuan dengan mudah dan cepat.
-                </p>
-
-            </div>
-
-            <div class="col-md-4 text-end d-none d-md-block">
-
-                <i class="fas fa-hand-holding-heart"
-                   style="font-size:120px; opacity:.15;">
-                </i>
+                </div>
 
             </div>
 
@@ -205,22 +52,35 @@ body{
 
     </div>
 
-    {{-- CARD STATISTIK --}}
-    <div class="row g-4">
+    {{-- STATISTIK --}}
+    <div class="row">
 
         <div class="col-md-3">
 
-            <div class="dashboard-card">
+            <div class="card border-0 shadow-sm"
+                 style="border-radius:18px;">
 
-                <div class="dashboard-icon bg-primary-soft">
+                <div class="card-body">
 
-                    <i class="fas fa-file-alt"></i>
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+                            <small class="text-muted">
+                                Total Pengajuan
+                            </small>
+
+                            <h2 class="font-weight-bold">
+                                {{ $totalPengajuan ?? 0 }}
+                            </h2>
+                        </div>
+
+                        <div class="text-primary">
+                            <i class="fas fa-file-alt fa-2x"></i>
+                        </div>
+
+                    </div>
 
                 </div>
-
-                <h4>Total Pengajuan</h4>
-
-                <h2>12</h2>
 
             </div>
 
@@ -228,17 +88,30 @@ body{
 
         <div class="col-md-3">
 
-            <div class="dashboard-card">
+            <div class="card border-0 shadow-sm"
+                 style="border-radius:18px;">
 
-                <div class="dashboard-icon bg-success-soft">
+                <div class="card-body">
 
-                    <i class="fas fa-check-circle"></i>
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+                            <small class="text-muted">
+                                Disetujui
+                            </small>
+
+                            <h2 class="font-weight-bold text-success">
+                                {{ $diterima ?? 0 }}
+                            </h2>
+                        </div>
+
+                        <div class="text-success">
+                            <i class="fas fa-check-circle fa-2x"></i>
+                        </div>
+
+                    </div>
 
                 </div>
-
-                <h4>Pengajuan Disetujui</h4>
-
-                <h2>8</h2>
 
             </div>
 
@@ -246,17 +119,30 @@ body{
 
         <div class="col-md-3">
 
-            <div class="dashboard-card">
+            <div class="card border-0 shadow-sm"
+                 style="border-radius:18px;">
 
-                <div class="dashboard-icon bg-warning-soft">
+                <div class="card-body">
 
-                    <i class="fas fa-clock"></i>
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+                            <small class="text-muted">
+                                Pending
+                            </small>
+
+                            <h2 class="font-weight-bold text-warning">
+                                {{ $pending ?? 0 }}
+                            </h2>
+                        </div>
+
+                        <div class="text-warning">
+                            <i class="fas fa-clock fa-2x"></i>
+                        </div>
+
+                    </div>
 
                 </div>
-
-                <h4>Menunggu Verifikasi</h4>
-
-                <h2>3</h2>
 
             </div>
 
@@ -264,17 +150,30 @@ body{
 
         <div class="col-md-3">
 
-            <div class="dashboard-card">
+            <div class="card border-0 shadow-sm"
+                 style="border-radius:18px;">
 
-                <div class="dashboard-icon bg-danger-soft">
+                <div class="card-body">
 
-                    <i class="fas fa-times-circle"></i>
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+                            <small class="text-muted">
+                                Ditolak
+                            </small>
+
+                            <h2 class="font-weight-bold text-danger">
+                                {{ $ditolak ?? 0 }}
+                            </h2>
+                        </div>
+
+                        <div class="text-danger">
+                            <i class="fas fa-times-circle fa-2x"></i>
+                        </div>
+
+                    </div>
 
                 </div>
-
-                <h4>Ditolak</h4>
-
-                <h2>1</h2>
 
             </div>
 
@@ -282,134 +181,198 @@ body{
 
     </div>
 
-    {{-- MENU --}}
-    <div class="menu-card mt-4">
+    {{-- MENU CEPAT --}}
+    <div class="row mt-4">
 
-        <div class="row g-4">
+        <div class="col-md-3">
+            <a href="/pengajuan"
+               class="text-decoration-none">
 
-            <div class="col-md-3">
+                <div class="card border-0 shadow-sm text-center p-3"
+                     style="border-radius:18px;">
 
-                <a href="#" class="menu-btn">
+                    <i class="fas fa-file-signature fa-2x text-primary mb-3"></i>
 
-                    <i class="fas fa-file-signature"></i>
+                    <h6 class="font-weight-bold">
+                        Ajukan Bantuan
+                    </h6>
 
-                    Ajukan Bantuan
+                </div>
 
-                </a>
+            </a>
+        </div>
 
-            </div>
+        <div class="col-md-3">
+            <a href="/riwayat"
+               class="text-decoration-none">
 
-            <div class="col-md-3">
+                <div class="card border-0 shadow-sm text-center p-3"
+                     style="border-radius:18px;">
 
-                <a href="#" class="menu-btn">
+                    <i class="fas fa-history fa-2x text-success mb-3"></i>
 
-                    <i class="fas fa-history"></i>
+                    <h6 class="font-weight-bold">
+                        Riwayat Pengajuan
+                    </h6>
 
-                    Riwayat Pengajuan
+                </div>
 
-                </a>
+            </a>
+        </div>
 
-            </div>
+        <div class="col-md-3">
+            <a href="/profil"
+               class="text-decoration-none">
 
-            <div class="col-md-3">
+                <div class="card border-0 shadow-sm text-center p-3"
+                     style="border-radius:18px;">
 
-                <a href="#" class="menu-btn">
+                    <i class="fas fa-user fa-2x text-warning mb-3"></i>
 
-                    <i class="fas fa-user"></i>
+                    <h6 class="font-weight-bold">
+                        Profil Saya
+                    </h6>
 
-                    Profil Saya
+                </div>
 
-                </a>
+            </a>
+        </div>
 
-            </div>
+        <div class="col-md-3">
+            <a href="/bantuan"
+               class="text-decoration-none">
 
-            <div class="col-md-3">
+                <div class="card border-0 shadow-sm text-center p-3"
+                     style="border-radius:18px;">
 
-                <a href="#" class="menu-btn">
+                    <i class="fas fa-newspaper fa-2x text-danger mb-3"></i>
 
-                    <i class="fas fa-newspaper"></i>
+                    <h6 class="font-weight-bold">
+                        Informasi Bantuan
+                    </h6>
 
-                    Informasi Bantuan
+                </div>
 
-                </a>
-
-            </div>
-
+            </a>
         </div>
 
     </div>
 
     {{-- RIWAYAT --}}
-    <div class="riwayat-card">
+    <div class="card border-0 shadow-sm mt-4"
+         style="border-radius:20px;">
 
-        <h4 class="fw-bold mb-4">
+        <div class="card-header bg-white border-0 pt-4">
 
-            <i class="fas fa-clock me-2 text-primary"></i>
+            <h5 class="font-weight-bold">
+                Riwayat Pengajuan
+            </h5>
 
-            Riwayat Pengajuan Terbaru
+        </div>
 
-        </h4>
+        <div class="card-body table-responsive">
 
-        <div class="table-responsive">
-
-            <table class="table table-hover align-middle">
+            <table class="table table-hover">
 
                 <thead>
 
                     <tr>
-
                         <th>No</th>
-                        <th>Jenis Bantuan</th>
-                        <th>Tanggal</th>
                         <th>Status</th>
-
+                        <th>Tanggal</th>
                     </tr>
 
                 </thead>
 
                 <tbody>
 
+                    @forelse($riwayat as $item)
+
                     <tr>
 
-                        <td>1</td>
-
-                        <td>Bantuan Pendidikan</td>
-
-                        <td>14 Mei 2026</td>
+                        <td>{{ $loop->iteration }}</td>
 
                         <td>
 
-                            <span class="badge bg-success">
-                                Disetujui
-                            </span>
+                            @if($item->status == 'diterima')
 
+                                <span class="badge badge-success px-3 py-2">
+                                    Disetujui
+                                </span>
+
+                            @elseif($item->status == 'ditolak')
+
+                                <span class="badge badge-danger px-3 py-2">
+                                    Ditolak
+                                </span>
+
+                            @else
+
+                                <span class="badge badge-warning px-3 py-2">
+                                    Pending
+                                </span>
+
+                            @endif
+
+                        </td>
+
+                        <td>
+                            {{ $item->created_at ?? '-' }}
                         </td>
 
                     </tr>
 
+                    @empty
+
                     <tr>
-
-                        <td>2</td>
-
-                        <td>Bantuan UMKM</td>
-
-                        <td>10 Mei 2026</td>
-
-                        <td>
-
-                            <span class="badge bg-warning text-dark">
-                                Diproses
-                            </span>
-
+                        <td colspan="3" class="text-center">
+                            Tidak ada data pengajuan
                         </td>
-
                     </tr>
+
+                    @endforelse
 
                 </tbody>
 
             </table>
 
         </div>
+
+    </div>
+
+    {{-- BERITA --}}
+    <div class="row mt-4">
+
+        @foreach($berita as $item)
+
+        <div class="col-md-4">
+
+            <div class="card border-0 shadow-sm h-100"
+                 style="border-radius:20px;">
+
+                <div class="card-body">
+
+                    <span class="badge badge-primary mb-2">
+                        Informasi Bantuan
+                    </span>
+
+                    <h5 class="font-weight-bold">
+                        {{ $item->judul ?? 'Berita Bantuan' }}
+                    </h5>
+
+                    <p class="text-muted">
+
+                        {{ Str::limit($item->isi ?? '-', 120) }}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        @endforeach
 
     </div>
 

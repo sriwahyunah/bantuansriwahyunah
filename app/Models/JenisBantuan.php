@@ -6,20 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class JenisBantuan extends Model
 {
-    protected $table = 'jenis_bantuans';
+    protected $table = 'jenis_bantuan';
 
     protected $fillable = [
-        'kategori_bantuan_id',
+
+        'kode_jenis',
         'nama_jenis',
+        'deskripsi',
+        'status'
+
     ];
-
-    public function kategoriBantuan()
-    {
-        return $this->belongsTo(KategoriBantuan::class);
-    }
-
-    public function pengajuans()
-    {
-        return $this->hasMany(Pengajuan::class);
-    }
 }

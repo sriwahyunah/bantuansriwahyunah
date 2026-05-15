@@ -2,7 +2,7 @@
 
     {{-- BRAND --}}
     <a href="#"
-       class="brand-link text-center">
+        class="brand-link text-center">
 
         <span class="brand-text font-weight-light fw-bold">
 
@@ -24,7 +24,7 @@
                 <li class="nav-item">
 
                     <a href="{{ route('penerima.index') }}"
-                       class="nav-link">
+                        class="nav-link">
 
                         <i class="nav-icon fas fa-home"></i>
 
@@ -37,7 +37,7 @@
                 <li class="nav-item">
 
                     <a href="#"
-                       class="nav-link">
+                        class="nav-link">
 
                         <i class="nav-icon fas fa-file-alt"></i>
 
@@ -50,7 +50,7 @@
                 <li class="nav-item">
 
                     <a href="#"
-                       class="nav-link">
+                        class="nav-link">
 
                         <i class="nav-icon fas fa-history"></i>
 
@@ -63,11 +63,41 @@
                 <li class="nav-item">
 
                     <a href="#"
-                       class="nav-link">
+                        class="nav-link">
 
                         <i class="nav-icon fas fa-user"></i>
 
                         <p>Profil</p>
+
+                    </a>
+
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ route('bantuan.index') }}"
+                        class="nav-link {{ request()->routeIs('bantuan.*') ? 'active' : '' }}">
+
+
+                        <i class="nav-icon fas fa-hand-holding-heart"></i>
+
+                        <p>Data Bantuan</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+
+                <li class="nav-item">
+
+                    <a href="{{ route('jenis-bantuan.index') }}"
+                        class="nav-link {{ request()->routeIs('jenis-bantuan.*') ? 'active' : '' }}">
+
+                        <i class="nav-icon fas fa-tags"></i>
+
+                        <p>
+
+                            Jenis Bantuan
+
+                        </p>
 
                     </a>
 

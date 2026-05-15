@@ -37,6 +37,7 @@ use App\Http\Controllers\Transaksi\PenyaluranController;
 use App\Http\Controllers\Transaksi\BuktiPenyaluranController;
 use App\Http\Controllers\Transaksi\BeritaController;
 use App\Http\Controllers\Transaksi\KomentarController;
+use App\Http\Controllers\Transaksi\BantuanController;
 
 use App\Http\Controllers\Laporan\LaporanController;
 use App\Http\Controllers\Laporan\LaporanBulananController;
@@ -181,15 +182,9 @@ Route::resource('tahun', TahunController::class);
 
 Route::resource('penerima', PenerimaController::class);
 
-Route::resource(
-    'kategori-bantuan',
-    KategoriBantuanController::class
-);
+Route::resource('kategori-bantuan', KategoriBantuanController::class);
 
-Route::resource(
-    'jenis-bantuan',
-    JenisBantuanController::class
-);
+Route::resource('jenis-bantuan', JenisBantuanController::class);
 
 Route::resource(
     'status-pengajuan',
@@ -231,6 +226,12 @@ Route::resource(
     'komentar',
     KomentarController::class
 );
+
+Route::middleware(['auth'])->group(function () {
+
+    Route::get('/bantuan', [BantuanController::class, 'index'])
+        ->name('bantuan.index');
+});
 
 /*
         |--------------------------------------------------------------------------
@@ -451,6 +452,49 @@ Route::put('/user/update/{id}', [UserController::class, 'update'])
 
 Route::delete('/user/delete/{id}', [UserController::class, 'destroy'])
     ->name('user.delete');
+/*
+|--------------------------------------------------------------------------
+| BANTUAN
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'role:admin'])
+    ->prefix('admin')
+    ->group(function () {
+
+        Route::get('/bantuan',
+            [BantuanController::class, 'index'])
+            ->name('bantuan.index');
+
+        Route::get('/bantuan/{id}',
+            [BantuanController::class, 'show'])
+            ->name('bantuan.detail');
+
+    });
+
+/*
+|--------------------------------------------------------------------------
+| JENIS BANTUAN
+|--------------------------------------------------------------------------
+*/
+
+Route::get(
+    '/jenis-bantuan',
+    [JenisBantuanController::class, 'index']
+)
+    ->name('jenis-bantuan.index');
+
+Route::get(
+    '/jenis-bantuan/create',
+    [JenisBantuanController::class, 'create']
+)
+    ->name('jenis-bantuan.create');
+
+Route::post(
+    '/jenis-bantuan/store',
+    [JenisBantuanController::class, 'store']
+)
+    ->name('jenis-bantuan.store');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -469,5 +513,4 @@ Route::post('/logout', function () {
     request()->session()->regenerateToken();
 
     return redirect('/');
-
 })->name('logout');

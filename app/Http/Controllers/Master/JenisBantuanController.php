@@ -5,131 +5,73 @@ namespace App\Http\Controllers\Master;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\JenisBantuan;
-use App\Models\KategoriBantuan;
 
 class JenisBantuanController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | INDEX
+    |--------------------------------------------------------------------------
+    */
+
     public function index()
     {
-        $jenisbantuans = JenisBantuan::with('kategoriBantuan')
-                            ->latest()
-                            ->get();
+        $jenis = JenisBantuan::latest()->get();
 
         return view(
-            'admin.jenisbantuan.index',
-            compact('jenisbantuans')
+            'admin.jenis-bantuan.index',
+            compact('jenis')
         );
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | CREATE
+    |--------------------------------------------------------------------------
+    */
+
     public function create()
     {
-        $kategoris = KategoriBantuan::all();
-
         return view(
-            'admin.jenisbantuan.create',
-            compact('kategoris')
+            'admin.jenis-bantuan.create'
         );
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | STORE
+    |--------------------------------------------------------------------------
+    */
+
     public function store(Request $request)
     {
         $request->validate([
-            'kategori_bantuan_id' => 'required',
-            'nama_jenis'          => 'required|max:255',
-            'nominal'             => 'required|numeric',
-            'keterangan'          => 'nullable'
+
+            'kode_jenis' => 'required|unique:jenis_bantuan',
+
+            'nama_jenis' => 'required',
+
+            'status' => 'required'
+
         ]);
 
         JenisBantuan::create([
-            'kategori_bantuan_id' => $request->kategori_bantuan_id,
-            'nama_jenis'          => $request->nama_jenis,
-            'nominal'             => $request->nominal,
-            'keterangan'          => $request->keterangan
+
+            'kode_jenis' => $request->kode_jenis,
+
+            'nama_jenis' => $request->nama_jenis,
+
+            'deskripsi' => $request->deskripsi,
+
+            'status' => $request->status
+
         ]);
 
         return redirect()
             ->route('jenis-bantuan.index')
-            ->with('success', 'Data jenis bantuan berhasil ditambahkan');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show($id)
-    {
-        $jenisbantuan = JenisBantuan::with('kategoriBantuan')
-                            ->findOrFail($id);
-
-        return view(
-            'admin.jenisbantuan.show',
-            compact('jenisbantuan')
-        );
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
-    {
-        $jenisbantuan = JenisBantuan::findOrFail($id);
-
-        $kategoris = KategoriBantuan::all();
-
-        return view(
-            'admin.jenisbantuan.edit',
-            compact(
-                'jenisbantuan',
-                'kategoris'
-            )
-        );
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'kategori_bantuan_id' => 'required',
-            'nama_jenis'          => 'required|max:255',
-            'nominal'             => 'required|numeric',
-            'keterangan'          => 'nullable'
-        ]);
-
-        $jenisbantuan = JenisBantuan::findOrFail($id);
-
-        $jenisbantuan->update([
-            'kategori_bantuan_id' => $request->kategori_bantuan_id,
-            'nama_jenis'          => $request->nama_jenis,
-            'nominal'             => $request->nominal,
-            'keterangan'          => $request->keterangan
-        ]);
-
-        return redirect()
-            ->route('jenis-bantuan.index')
-            ->with('success', 'Data jenis bantuan berhasil diupdate');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
-    {
-        $jenisbantuan = JenisBantuan::findOrFail($id);
-
-        $jenisbantuan->delete();
-
-        return redirect()
-            ->route('jenis-bantuan.index')
-            ->with('success', 'Data jenis bantuan berhasil dihapus');
+            ->with(
+                'success',
+                'Jenis bantuan berhasil ditambahkan'
+            );
     }
 }

@@ -4,172 +4,77 @@
 
 @section('content')
 
-<div class="content-wrapper">
-
-<section class="content-header">
-
 <div class="container-fluid">
 
-<div class="row mb-2">
+    <div class="card shadow border-0">
 
-<div class="col-sm-6">
+        <div class="card-header bg-primary text-white">
 
-<h1>Data Pengajuan</h1>
+            <h5 class="mb-0">
+                Data Pengajuan Bantuan
+            </h5>
 
-</div>
+        </div>
 
-<div class="col-sm-6 text-right">
+        <div class="card-body table-responsive">
 
-<a href="{{ route('admin.pengajuan.create') }}"
-   class="btn btn-primary">
+            <table class="table table-bordered table-hover">
 
-Tambah Pengajuan
+                <thead>
 
-</a>
+                    <tr>
+                        <th>No</th>
+                        <th>Jenis Bantuan</th>
+                        <th>Keterangan</th>
+                        <th>Status</th>
+                    </tr>
 
-</div>
+                </thead>
 
-</div>
+                <tbody>
 
-</div>
+                    @forelse($pengajuan as $item)
 
-</section>
+                    <tr>
 
-<section class="content">
+                        <td>{{ $loop->iteration }}</td>
 
-<div class="container-fluid">
+                        <td>{{ $item->jenis_bantuan }}</td>
 
-@if(session('success'))
+                        <td>{{ $item->keterangan }}</td>
 
-<div class="alert alert-success">
+                        <td>
 
-{{ session('success') }}
+                            <span class="badge badge-warning">
+                                {{ $item->status }}
+                            </span>
 
-</div>
+                        </td>
 
-@endif
+                    </tr>
 
-<div class="card">
+                    @empty
 
-<div class="card-body table-responsive">
+                    <tr>
 
-<table class="table table-bordered">
+                        <td colspan="4"
+                            class="text-center">
 
-<thead class="bg-primary">
+                            Tidak ada data
 
-<tr>
+                        </td>
 
-<th>No</th>
+                    </tr>
 
-<th>ID Penerima</th>
+                    @endforelse
 
-<th>Judul</th>
+                </tbody>
 
-<th>Deskripsi</th>
+            </table>
 
-<th>File</th>
+        </div>
 
-<th>Status</th>
-
-<th width="200">Aksi</th>
-
-</tr>
-
-</thead>
-
-<tbody>
-
-@forelse($pengajuans as $item)
-
-<tr>
-
-<td>{{ $loop->iteration }}</td>
-
-<td>{{ $item->id_penerima }}</td>
-
-<td>{{ $item->judul }}</td>
-
-<td>{{ $item->deskripsi }}</td>
-
-<td>
-
-@if($item->file)
-
-<a href="{{ asset('uploads/pengajuan/'.$item->file) }}"
-   target="_blank">
-
-Lihat File
-
-</a>
-
-@endif
-
-</td>
-
-<td>{{ $item->status }}</td>
-
-<td>
-
-<a href="{{ route('admin.pengajuan.show', $item->id) }}"
-   class="btn btn-info btn-sm">
-
-Detail
-
-</a>
-
-<a href="{{ route('admin.pengajuan.edit', $item->id) }}"
-   class="btn btn-warning btn-sm">
-
-Edit
-
-</a>
-
-<form action="{{ route('admin.pengajuan.destroy', $item->id) }}"
-      method="POST"
-      class="d-inline">
-
-@csrf
-@method('DELETE')
-
-<button class="btn btn-danger btn-sm"
-        onclick="return confirm('Hapus data?')">
-
-Hapus
-
-</button>
-
-</form>
-
-</td>
-
-</tr>
-
-@empty
-
-<tr>
-
-<td colspan="7"
-    class="text-center">
-
-Data pengajuan kosong
-
-</td>
-
-</tr>
-
-@endforelse
-
-</tbody>
-
-</table>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
+    </div>
 
 </div>
 

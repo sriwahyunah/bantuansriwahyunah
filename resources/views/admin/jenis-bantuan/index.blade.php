@@ -1,28 +1,61 @@
 @extends('layouts.admin')
 
-@section('title', 'Data Bantuan')
+@section('title', 'Jenis Bantuan')
 
 @section('content')
 
 <div class="content-wrapper">
 
+    {{-- HEADER --}}
     <section class="content-header">
 
         <div class="container-fluid">
 
-            <h1>
+            <div class="row mb-2">
 
-                Data Bantuan
+                <div class="col-sm-6">
 
-            </h1>
+                    <h1>
+
+                        <i class="fas fa-tags"></i>
+                        Jenis Bantuan
+
+                    </h1>
+
+                </div>
+
+                <div class="col-sm-6 text-right">
+
+                    <a href="{{ route('jenis-bantuan.create') }}"
+                       class="btn btn-success">
+
+                        <i class="fas fa-plus"></i>
+                        Tambah Jenis Bantuan
+
+                    </a>
+
+                </div>
+
+            </div>
 
         </div>
 
     </section>
 
+    {{-- CONTENT --}}
     <section class="content">
 
         <div class="container-fluid">
+
+            @if(session('success'))
+
+                <div class="alert alert-success">
+
+                    {{ session('success') }}
+
+                </div>
+
+            @endif
 
             <div class="card card-success card-outline">
 
@@ -30,16 +63,29 @@
 
                     <table class="table table-bordered table-hover">
 
-                        <thead>
+                        <thead class="bg-light">
 
                             <tr>
 
-                                <th>No</th>
-                                <th>Kode</th>
-                                <th>Nama Bantuan</th>
-                                <th>Kuota</th>
-                                <th>Status</th>
-                                <th>Aksi</th>
+                                <th width="5%">
+                                    No
+                                </th>
+
+                                <th>
+                                    Kode Jenis
+                                </th>
+
+                                <th>
+                                    Nama Jenis Bantuan
+                                </th>
+
+                                <th>
+                                    Deskripsi
+                                </th>
+
+                                <th width="10%">
+                                    Status
+                                </th>
 
                             </tr>
 
@@ -47,7 +93,7 @@
 
                         <tbody>
 
-                            @forelse($bantuan as $item)
+                            @forelse($jenis as $item)
 
                             <tr>
 
@@ -59,19 +105,23 @@
 
                                 <td>
 
-                                    {{ $item->kode_bantuan }}
+                                    <span class="badge badge-info">
+
+                                        {{ $item->kode_jenis }}
+
+                                    </span>
 
                                 </td>
 
                                 <td>
 
-                                    {{ $item->nama_bantuan }}
+                                    {{ $item->nama_jenis }}
 
                                 </td>
 
                                 <td>
 
-                                    {{ $item->total_kuota }}
+                                    {{ $item->deskripsi }}
 
                                 </td>
 
@@ -97,27 +147,16 @@
 
                                 </td>
 
-                                <td>
-
-                                    <a href="{{ route('bantuan.detail', $item->id) }}"
-                                       class="btn btn-info btn-sm">
-
-                                        Detail
-
-                                    </a>
-
-                                </td>
-
                             </tr>
 
                             @empty
 
                             <tr>
 
-                                <td colspan="6"
+                                <td colspan="5"
                                     class="text-center">
 
-                                    Data bantuan kosong
+                                    Data jenis bantuan belum tersedia
 
                                 </td>
 

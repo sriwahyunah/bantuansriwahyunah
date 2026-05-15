@@ -4,87 +4,73 @@
 
 @section('content')
 
-<div class="card">
+<div class="container-fluid">
 
-    <div class="card-header d-flex justify-content-between">
+    <div class="card border-0 shadow-lg">
 
-        <h3 class="card-title">
+        <div class="card-header bg-primary text-white">
 
-            Data Pengajuan Bantuan
+            <h5 class="mb-0">
+                Form Pengajuan Bantuan
+            </h5>
 
-        </h3>
+        </div>
 
-        <a href="{{ route('penerima.pengajuan.create') }}"
-           class="btn btn-primary">
+        <div class="card-body">
 
-            Tambah Pengajuan
+            <form action="/penerima/pengajuan"
+                  method="POST">
 
-        </a>
+                @csrf
 
-    </div>
+                <div class="form-group">
 
-    <div class="card-body table-responsive">
+                    <label>Jenis Bantuan</label>
 
-        <table class="table table-bordered table-striped">
+                    <select name="jenis_bantuan"
+                            class="form-control">
 
-            <thead>
+                        <option value="">
+                            -- Pilih Bantuan --
+                        </option>
 
-                <tr>
+                        <option value="PKH">
+                            PKH
+                        </option>
 
-                    <th>No</th>
-                    <th>Jenis Bantuan</th>
-                    <th>Tanggal</th>
-                    <th>Status</th>
-                    <th>Aksi</th>
+                        <option value="BLT">
+                            BLT
+                        </option>
 
-                </tr>
+                        <option value="Pendidikan">
+                            Pendidikan
+                        </option>
 
-            </thead>
+                    </select>
 
-            <tbody>
+                </div>
 
-                @foreach ($pengajuans as $item)
+                <div class="form-group">
 
-                <tr>
+                    <label>Keterangan</label>
 
-                    <td>{{ $loop->iteration }}</td>
+                    <textarea name="keterangan"
+                              rows="5"
+                              class="form-control"></textarea>
 
-                    <td>
-                        {{ $item->jenisBantuan->nama_jenis ?? '-' }}
-                    </td>
+                </div>
 
-                    <td>
-                        {{ $item->created_at->format('d-m-Y') }}
-                    </td>
+                <button class="btn btn-primary">
 
-                    <td>
+                    <i class="fas fa-paper-plane"></i>
 
-                        <span class="badge badge-info">
+                    Kirim Pengajuan
 
-                            {{ $item->status }}
+                </button>
 
-                        </span>
+            </form>
 
-                    </td>
-
-                    <td>
-
-                        <a href="{{ route('penerima.pengajuan.show', $item->id) }}"
-                           class="btn btn-info btn-sm">
-
-                            Detail
-
-                        </a>
-
-                    </td>
-
-                </tr>
-
-                @endforeach
-
-            </tbody>
-
-        </table>
+        </div>
 
     </div>
 
